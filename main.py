@@ -8,18 +8,21 @@ ALL CODE IS LICENSED UNDER GNU-GPL LICENSE. READ LICENSE FOR MORE INFORMATION
 """
 
 from mainui import Ui_Dialog
+import os
+import sys
+from PyQt5 import QtCore, QtGui, uic, QtWidgets
 TERMINAL = ["CH3", "CH2"]
 BOND = ["CH3-", "CH2-", "CH1=", "CH1-", " C ≡"]
 counter2 = 1
-answer=""
+answer = ""
 k = 0
 RESULT = ""
 NNNRESULT = ""
 NNNNRESULT = ""
 
-noofc = int(input("Enter number of carbon atoms ---> "))
+# noofc = int(input("Enter number of carbon atoms ---> "))
 
-bonds = int(input("Enter  1: single bond 2: double bond 3: triple bond  ---> "))
+# bonds = int(input("Enter  1: single bond 2: double bond 3: triple bond  ---> "))
 
 
 def addfunctionalgrp():
@@ -33,15 +36,13 @@ def addfunctionalgrp():
             print("Invalid Input!")
         else:
             halogen = input("Enter the symbol of the halogen ---> ")
-            if(halocounter==1):
+            if(halocounter == 1):
                 tempterminal = answer[-4:]
                 tempterminal = tempterminal.replace("CH3", "CH2")
-                answer=answer[:-5]+tempterminal
+                answer = answer[:-5]+tempterminal
 
 
-
-
-def alkane():
+def alkane(noofc):
     if (noofc == 1):
 
         answer = "CH4"
@@ -49,9 +50,10 @@ def alkane():
 
         answer = BOND[0] + BOND[1] * (noofc - 2) + TERMINAL[0]
     print(answer)
+    return answer
 
 
-def alkene():
+def alkene(noofc):
     if (noofc == 1):
 
         answer = "Not possible"
@@ -66,7 +68,8 @@ def alkene():
         counter3 = 0
         while (k == 1):
 
-            counter = int(input("Enter the postion of the bond (from least to greatest or left to right) --> "))
+            counter = int(input(
+                "Enter the postion of the bond (from least to greatest or left to right) --> "))
 
             if (counter == 0):
                 k = 0
@@ -86,15 +89,17 @@ def alkene():
                     print("Enter in ascending order")
                     k = 0
                 else:
-                    answer = answer[:(4 * (counter - 1))] + BOND[2] + answer[(4 * (counter)):]
+                    answer = answer[:(4 * (counter - 1))] + \
+                        BOND[2] + answer[(4 * (counter)):]
 
                     answer = answer.replace("=CH2-", "=CH1-")
                     answer = answer.replace("=CH1=", "= C =")
                     print(answer)
                     counter3 = counter
+    return answer
 
 
-def alkyne():
+def alkyne(noofc):
     if (noofc == 1):
 
         answer = "Not possible"
@@ -109,7 +114,8 @@ def alkyne():
         counter3 = 0
         while (k == 1):
 
-            counter = int(input("Enter the postion of the bond (from least to greatest or left to right) --> "))
+            counter = int(input(
+                "Enter the postion of the bond (from least to greatest or left to right) --> "))
 
             if (counter == 0):
                 k = 0
@@ -133,22 +139,60 @@ def alkyne():
                     print("Valency of Carbon is 4")
                     k = 0
                 else:
-                    answer = answer[:(4 * (counter - 1))] + BOND[4] + answer[(4 * (counter)):]
+                    answer = answer[:(4 * (counter - 1))] + \
+                        BOND[4] + answer[(4 * (counter)):]
                     answer = answer.replace("≡CH2-", "≡ C -")
 
                     if (answer[(4 * (counter - 1) + 3):(4 * (counter - 1) + 8)] == "≡CH2-"):
                         print("≡")
-                        answer = answer[:(4 * (counter - 1) + 3)] + "≡ C -" + answer[(4 * (counter - 1) + 8):]
+                        answer = answer[:(4 * (counter - 1) + 3)] + \
+                            "≡ C -" + answer[(4 * (counter - 1) + 8):]
 
                     print(answer)
                     counter3 = counter
+    return answer
 
 
-if (bonds == 1):
-    alkane()
-elif (bonds == 2):
-    alkene()
-elif (bonds == 3):
-    alkyne()
-else:
-    print("Bye Bye!")
+def chkBond(bonds, noofc):
+
+    if (bonds == 1):
+        res = alkane(noofc)
+        return res
+
+    elif (bonds == 2):
+        res = alkene(noofc)
+        return res
+    elif (bonds == 3):
+        res = alkyne(noofc)
+        return res
+    else:
+        res = "Bye Bye!"
+        print(res)
+        return res
+
+
+class MyAppv(Ui_Dialog):
+    def __init__(self, Dialog):
+        super(MyAppv, self).__init__()
+        Ui_Dialog.__init__(self)
+        self.setupUi(Dialog)
+        # self.bondui.sliderChange.connect()
+        self.pushButton.pressed.connect(self.compute)
+
+    def compute(self):
+        noofc = self.nooc.value()
+        bonds = self.bondui.value()
+        print(noofc)
+        print(bonds)
+        restxt = chkBond(bonds, noofc)
+        print(restxt + "jj")
+        self.output.setText(restxt)
+
+
+if __name__ == "__main__":
+    appo = QtWidgets.QApplication(sys.argv)
+    # app.aboutToQuit().connect(app.deleteLater)
+    window = QtWidgets.QMainWindow()
+    progg = MyAppv(window)
+    window.show()
+    sys.exit(appo.exec_())

@@ -82,6 +82,7 @@ def alkene():
                     answer = answer.replace("=CH1=", "= C =")
                     print(answer)
                     counter3 = counter
+                    
 
 
 def alkyne():

@@ -130,6 +130,8 @@ class MyAppv(Ui_Dialog):
         print(restxt + "jj")
         leng = len(restxt)
         if(leng>=32):
+            
+            
             self.output.setFont(QtGui.QFont('Courier New', 10, weight=QtGui.QFont.Bold))
         else:
             self.output.setFont(QtGui.QFont('Courier New', 14, weight=QtGui.QFont.Bold))

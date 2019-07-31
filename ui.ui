@@ -20,9 +20,9 @@
   <widget class="QSpinBox" name="nooc">
    <property name="geometry">
     <rect>
-     <x>227</x>
+     <x>287</x>
      <y>80</y>
-     <width>161</width>
+     <width>101</width>
      <height>31</height>
     </rect>
    </property>
@@ -36,9 +36,9 @@
   <widget class="QSlider" name="bondui">
    <property name="geometry">
     <rect>
-     <x>227</x>
+     <x>286</x>
      <y>120</y>
-     <width>160</width>
+     <width>101</width>
      <height>31</height>
     </rect>
    </property>
@@ -206,7 +206,7 @@
     <rect>
      <x>20</x>
      <y>120</y>
-     <width>201</width>
+     <width>181</width>
      <height>31</height>
     </rect>
    </property>
@@ -332,6 +332,19 @@ background-color: rgb(63, 63, 63);</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="bondtxt">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>120</y>
+     <width>81</width>
+     <height>31</height>
+    </rect>
    </property>
   </widget>
  </widget>

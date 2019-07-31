@@ -52,6 +52,8 @@ class MyAppv(Ui_Dialog):
         self.pushButton_2.pressed.connect(self.quitme)
         self.placer.sliderMoved.connect(self.sliderValueChange)
         self.placer.sliderReleased.connect(self.sliderValueChange)
+        self.bondui.sliderMoved.connect(self.bondSliderValueChange)
+        self.bondui.sliderReleased.connect(self.bondSliderValueChange)
         self.placertxt.setText(str(self.placer.value()))
         self.pushButton_3.setEnabled(False)
         self.pushButton_3.pressed.connect(self.bondchk)
@@ -59,6 +61,17 @@ class MyAppv(Ui_Dialog):
     def quitme(self):
         sys.exit(0)
 
+    def bondSliderValueChange(self):
+        if(self.bondui.value()==1):
+            smCarbon = "ALKANE"
+        elif(self.bondui.value()==2):
+            smCarbon = "ALKENE"
+        elif(self.bondui.value() == 3):
+            smCarbon = "ALKYNE"
+        else:
+            smCarbon = "NONE"
+        self.bondtxt.setText(str(smCarbon))
+    
     def sliderValueChange(self):
         self.placertxt.setText(str(self.placer.value()))
     def bondchk(self):

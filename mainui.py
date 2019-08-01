@@ -121,9 +121,14 @@ class Ui_Dialog(object):
         self.output.setAlignment(QtCore.Qt.AlignCenter)
         self.output.setWordWrap(True)
         self.output.setObjectName("output")
-        self.bondtxt = QtWidgets.QTextEdit(Dialog)
-        self.bondtxt.setEnabled(False)
-        self.bondtxt.setGeometry(QtCore.QRect(200, 120, 81, 31))
+        self.bondtxt = QtWidgets.QLabel(Dialog)
+        self.bondtxt.setGeometry(QtCore.QRect(210, 123, 71, 21))
+        self.bondtxt.setAutoFillBackground(False)
+        self.bondtxt.setStyleSheet("border-color: rgb(117, 117, 117);\n"
+"gridline-color: rgb(117, 117, 117);\n"
+"background-color: rgb(212, 212, 212);")
+        self.bondtxt.setTextFormat(QtCore.Qt.AutoText)
+        self.bondtxt.setAlignment(QtCore.Qt.AlignCenter)
         self.bondtxt.setObjectName("bondtxt")
 
         self.retranslateUi(Dialog)
@@ -142,5 +147,6 @@ class Ui_Dialog(object):
         self.label_5.setText(_translate("Dialog", "Position of Alkene / Alkane bond (can be added on consecutively)"))
         self.abt.setToolTip(_translate("Dialog", "About"))
         self.output.setText(_translate("Dialog", "-- OUTPUT --"))
+        self.bondtxt.setText(_translate("Dialog", "ALKANE"))
 
 

@@ -334,17 +334,31 @@ background-color: rgb(63, 63, 63);</string>
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QTextEdit" name="bondtxt">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
+  <widget class="QLabel" name="bondtxt">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>120</y>
-     <width>81</width>
-     <height>31</height>
+     <x>210</x>
+     <y>123</y>
+     <width>71</width>
+     <height>21</height>
     </rect>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-color: rgb(117, 117, 117);
+gridline-color: rgb(117, 117, 117);
+background-color: rgb(212, 212, 212);</string>
+   </property>
+   <property name="text">
+    <string>ALKANE</string>
+   </property>
+   <property name="textFormat">
+    <enum>Qt::AutoText</enum>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>

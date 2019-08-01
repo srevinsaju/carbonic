@@ -1,6 +1,7 @@
 # carbonic
 
 A simple python carbon engine which introduces as many bonds (single, double or triple) as required. **carbonic** algorithm checks for exception through gui and makes safe alteration to the structure.
+![carbonic](screenshot.png)
 
 ## Why carbonic?
 I chose the name 'carbonic' because, it is not about carbonic acids and other unrelated stuff but, instead, a small abbreviation for **CARBON** **I**n **C**ode.

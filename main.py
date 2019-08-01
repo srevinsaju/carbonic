@@ -24,6 +24,148 @@ NNNNRESULT = ""
 
 # bonds = int(input("Enter  1: single bond 2: double bond 3: triple bond  ---> "))
 
+def convertor(inp):
+    inp = inp.strip()
+    inp = inp.lowercase()
+    
+    if(inp.endswith("ane")):
+        bond_int = 1
+    elif(inp.endswith("ene")):
+        bond_int = 2
+    elif(inp.endswith("yne")):
+        bond_int = 3
+    else:
+        bond_int = 0
+        print("ERROR: INVALID")
+    
+    
+def convertor(inp):
+    inp = inp.strip()
+    inp = inp.lower()
+    
+    if(inp.endswith("ane")):
+        bond_int = 1
+        print("alkan")
+        restOfInp = inp.partition("ane")
+    elif(inp.endswith("ene")):
+        print("alken")
+        bond_int = 2
+        restOfInp = inp.partition("ene")
+        
+    elif(inp.endswith("yne")):
+        bond_int = 3
+        print("alkyn")
+        restOfInp = inp.partition("yne")
+    else:
+        bond_int = 0
+        
+        print("ERROR: INVALID")
+        return "ERROR 344"
+    restOfInp = list(restOfInp)
+    noofc0 = 0
+    sepInp = restOfInp
+    if(restOfInp[0].find("hect")>-1):
+        restOfInp[0]=restOfInp[0][5:]
+        hect = True
+    else:
+        hect = False
+    
+    if(restOfInp[0].find("triacont")>-1):
+        try:
+            noofc0 +=30
+            restOfInp[0] = restOfInp[0].replace('triacont', '')
+        except UnboundLocalError:
+            print("ERROR")
+    if(restOfInp[0].find("tetracont")>-1):
+        try:
+            noofc0 +=40
+            restOfInp[0] = restOfInp[0].replace('tetracont', '')
+        except UnboundLocalError:
+            print("ERROR")
+    if(restOfInp[0].find("pentacont")>-1):
+        try:
+            noofc0 +=50
+            restOfInp[0] = restOfInp[0].replace('pentacont', '')
+        except UnboundLocalError:
+            print("ERROR")
+    if(restOfInp[0].find("hexacont")>-1):
+        try:
+            restOfInp[0] = restOfInp[0].replace('hexacont', '')
+            noofc0 +=60
+        except UnboundLocalError:
+            print("ERROR")
+    if(restOfInp[0].find("heptacont")>-1):
+        try:
+            restOfInp[0] = restOfInp[0].replace('heptacont', '')
+            noofc0 +=70
+        except UnboundLocalError:
+            print("ERROR")
+    if(restOfInp[0].find("octacont")>-1):
+        try:
+            restOfInp[0] = restOfInp[0].replace('octacont', '')
+            noofc0 +=80
+        except UnboundLocalError:
+            print("ERROR")
+    if(restOfInp[0].find("nonacont")>-1):
+        try:
+            restOfInp[0] = restOfInp[0].replace('nonacont', '')
+            noofc0 +=90
+        except UnboundLocalError:
+            print("ERROR")
+    
+    
+    if(restOfInp[0].startswith("meth")or restOfInp[0].startswith("un")or restOfInp[0].startswith("hen")):
+        if(restOfInp[0].startswith("meth")or restOfInp[0].startswith("hen")):
+            noofc0 += 1
+        else:
+            noofc0 += 1 #*restOfInp[0].count("un")
+        
+    if(restOfInp[0].startswith("eth")or restOfInp[0].startswith("do")):
+        if(restOfInp[0].startswith("eth")):
+            noofc0 += 2
+        else:
+            noofc0 += 2 #*restOfInp[0].count("do")
+    if(restOfInp[0].startswith("prop")or restOfInp[0].startswith("tri")):
+        if(restOfInp[0].startswith("prop")):
+            noofc0 += 3
+        else:
+            noofc0 += 3 #*restOfInp[0].count("tri")
+    if(restOfInp[0].startswith("but")or restOfInp[0].startswith("tetra")):
+        if(restOfInp[0].startswith("but")):
+            noofc0 += 4
+        else:
+            noofc0 += "4" # *restOfInp[0].count("tetra")
+    if(restOfInp[0].startswith("pent")):
+        noofc0 += 5
+    if(restOfInp[0].startswith("hex")):
+        noofc0 += 6
+    if(restOfInp[0].startswith("sept") or restOfInp[0].startswith("hept")):
+        noofc0 += 7
+    if(restOfInp[0].startswith("oct")):
+        noofc0 += 8
+    if(restOfInp[0].startswith("non")):
+        noofc0 += 9
+    if(restOfInp[0].startswith("dec")):
+        noofc0 += 0
+    
+    if(restOfInp[0].find("dec")>-1):
+        try:
+            noofc0 = 10+noofc0
+        except UnboundLocalError:
+            print("ERROR")
+    if(restOfInp[0].find("cos")>-1):
+        try:
+            noofc0 = 20+noofc0
+        except UnboundLocalError:
+            print("ERROR")
+    if hect:
+        noofc0 = 100+noofc0
+    
+    restOfInp = restOfInp[:-1]
+    print(restOfInp)
+    print(noofc0)
+    return noofc0, bond_int
+    
 def addfunctionalgrp(noofc):
     functionalgrp = input(
         "Enter the type of functional group you would like to append to the current Carbon chain ---> ")
@@ -50,14 +192,64 @@ class MyAppv(Ui_Dialog):
         # self.bondui.sliderChange.connect()
         self.pushButton.pressed.connect(self.compute)
         self.pushButton_2.pressed.connect(self.quitme)
+        
         self.placer.sliderMoved.connect(self.sliderValueChange)
         self.placer.sliderReleased.connect(self.sliderValueChange)
+        self.radioButton.pressed.connect(self.radio1)
+        self.radioButton_2.pressed.connect(self.radio2)
         self.bondui.sliderMoved.connect(self.bondSliderValueChange)
         self.bondui.sliderReleased.connect(self.bondSliderValueChange)
         self.placertxt.setText(str(self.placer.value()))
         self.pushButton_3.setEnabled(False)
         self.pushButton_3.pressed.connect(self.bondchk)
+        self.pushButton_4.pressed.connect(self.transalate)
+        
+    def transalate(self):
+        inpu = self.textEdit.toPlainText()
+        noofc, bondo = convertor(inpu)
+        self.compute(noofc, bondo)
+        
 
+    def radio1(self):
+        self.textEdit.setEnabled(False)
+        self.radioButton_2.setChecked(False)
+        self.radioButton.setChecked(True)
+        self.nooc.setEnabled(True)
+        self.bondui.setEnabled(True)
+        self.placer.setEnabled(True)
+        self.pushButton.setEnabled(True)
+        self.pushButton_4.setEnabled(False)
+        
+    def radio2(self):
+        self.textEdit.setEnabled(True)
+        self.radioButton_2.setChecked(True)
+        self.radioButton.setChecked(False)
+        self.nooc.setEnabled(False)
+        self.bondui.setEnabled(False)
+        self.placer.setEnabled(False)
+        self.pushButton.setEnabled(False)
+        self.pushButton_4.setEnabled(True)
+        
+    def switchoff(self):
+        print(self.radioButton.isChecked())
+        print(self.radioButton_2.isChecked())
+        if(self.radioButton.isChecked()):
+            self.textEdit.setEnabled(False)
+            self.radioButton_2.setChecked(False)
+            self.radioButton.setChecked(True)
+            self.nooc.setEnabled(True)
+            self.bondui.setEnabled(True)
+            self.placer.setEnabled(True)
+            
+        elif(self.radioButton_2.isChecked()):
+            self.textEdit.setEnabled(True)
+            self.radioButton_2.setChecked(True)
+            self.radioButton.setChecked(False)
+            self.nooc.setEnabled(False)
+            self.bondui.setEnabled(False)
+            self.placer.setEnabled(False)
+            
+            
     def quitme(self):
         sys.exit(0)
 
@@ -134,17 +326,22 @@ class MyAppv(Ui_Dialog):
         else:
             self.placer.setMaximum(noofcc - 2)
 
-    def compute(self):
-        noofc = self.nooc.value()
-        bonds = self.bondui.value()
+    def compute(self, noc=None, boc=None):
+        if(noc ==None):
+            noofc = self.nooc.value()
+        else:
+            noofc = noc
+        if(boc == None):
+            bonds = self.bondui.value()
+        else:
+            bonds=boc
         print(noofc)
         print(bonds)
         restxt = self.chkBond(bonds, noofc)
         print(restxt + "jj")
         leng = len(restxt)
         if(leng>=32):
-            
-            
+
             self.output.setFont(QtGui.QFont('Courier New', 10, weight=QtGui.QFont.Bold))
         else:
             self.output.setFont(QtGui.QFont('Courier New', 14, weight=QtGui.QFont.Bold))

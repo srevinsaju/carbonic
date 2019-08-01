@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>408</width>
-    <height>401</height>
+    <width>401</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -64,8 +64,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>360</y>
+     <x>254</x>
+     <y>420</y>
      <width>91</width>
      <height>23</height>
     </rect>
@@ -81,8 +81,8 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>354</x>
-     <y>360</y>
+     <x>348</x>
+     <y>420</y>
      <width>31</width>
      <height>23</height>
     </rect>
@@ -98,8 +98,8 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>74</x>
-     <y>360</y>
+     <x>68</x>
+     <y>420</y>
      <width>181</width>
      <height>23</height>
     </rect>
@@ -283,8 +283,8 @@
   <widget class="QPushButton" name="abt">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>360</y>
+     <x>14</x>
+     <y>420</y>
      <width>31</width>
      <height>23</height>
     </rect>
@@ -306,8 +306,8 @@
   <widget class="QLabel" name="output">
    <property name="geometry">
     <rect>
-     <x>26</x>
-     <y>240</y>
+     <x>20</x>
+     <y>310</y>
      <width>361</width>
      <height>101</height>
     </rect>
@@ -359,6 +359,74 @@ background-color: rgb(212, 212, 212);</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="radioButton">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>230</y>
+     <width>361</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Enter above details</string>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="radioButton_2">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>250</y>
+     <width>361</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Enter the IUPAC name (experimental, only Alkane upto 100)</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="textEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>270</y>
+     <width>311</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string extracomment="eg: heptane"/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_4">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>270</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>GO</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>g960.png</normaloff>g960.png</iconset>
    </property>
   </widget>
  </widget>

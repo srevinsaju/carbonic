@@ -9,6 +9,7 @@ ALL CODE IS LICENSED UNDER GNU-GPL LICENSE. READ LICENSE FOR MORE INFORMATION
 
 from mainui import Ui_Dialog
 import os
+from math import ceil
 import sys
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 TERMINAL = ["CH3", "CH2"]
@@ -23,10 +24,11 @@ NNNNRESULT = ""
 # noofc = int(input("Enter number of carbon atoms ---> "))
 
 # bonds = int(input("Enter  1: single bond 2: double bond 3: triple bond  ---> "))
-
+"""
 def convertor(inp):
     inp = inp.strip()
     inp = inp.lowercase()
+    tmpinp = inp
     
     if(inp.endswith("ane")):
         bond_int = 1
@@ -38,10 +40,70 @@ def convertor(inp):
         bond_int = 0
         print("ERROR: INVALID")
     
-    
+    """
 def convertor(inp):
+    func = None
     inp = inp.strip()
     inp = inp.lower()
+    
+    addOnBranches = []
+    addOnBranchesNum = []
+    listOfAdditionalStuff = ["methyl", "ethyl", "propyl", "butyl", "pentyl", "hexyl"]
+    count = 1
+    print(inp.find("["), " is INDEX")
+    if((inp.find("["))!=-1):
+        
+        for i in listOfAdditionalStuff:
+            if(inp.find(i)==-1):
+                print("pass")
+                count+=1
+                continue
+            else:
+                print("found ", i)
+                indic = inp.find(i)
+                addOnNum = int(inp[inp.find("[")+1:indic-1])
+                print("LOG : AddOnNum is ", addOnNum)
+                addOnBranchesNum.append(addOnNum)
+                addOnBranches.append(i)
+                inp=inp[(indic+len(i)+1):]
+                
+                count+=1
+                
+    else:
+        print("HOHO")
+    print(inp)
+    print("LOG: addOnBranchesNum = ", addOnBranchesNum)
+    print("LOG: addOnBranches = ", addOnBranches)
+    tmpinp = inp
+    bond00 = []
+    
+    for i in tmpinp:
+        if(inp[0].isalpha()):
+            print("alpha")
+            break
+        try:
+            if(inp[0].isnumeric):
+                bond00.append(inp[0])
+                inp = inp[1:]
+            else:
+                print("No",i)
+        except IndexError:
+            print("No index, passing")
+        try:
+            if(inp[0]==","):
+                inp = inp[1:]
+        except IndexError:
+            print("No Index, passing")
+        try:
+            if(inp[0] == "-"):
+                inp = inp[1:]
+                break
+            else:
+                print("NONO", i)
+        
+        except IndexError:
+            print("No Index, passing")
+       
     
     if(inp.endswith("ane")):
         bond_int = 1
@@ -164,7 +226,8 @@ def convertor(inp):
     restOfInp = restOfInp[:-1]
     print(restOfInp)
     print(noofc0)
-    return noofc0, bond_int
+    
+    return noofc0, bond_int, bond00, addOnBranchesNum, addOnBranches
     
 def addfunctionalgrp(noofc):
     functionalgrp = input(
@@ -206,8 +269,8 @@ class MyAppv(Ui_Dialog):
         
     def transalate(self):
         inpu = self.textEdit.toPlainText()
-        noofc, bondo = convertor(inpu)
-        self.compute(noofc, bondo)
+        noofc, bondo, bond01, numbranch, branch = convertor(inpu)
+        self.compute(noofc, bondo, bond01, numbranch, branch)
         
 
     def radio1(self):
@@ -326,7 +389,7 @@ class MyAppv(Ui_Dialog):
         else:
             self.placer.setMaximum(noofcc - 2)
 
-    def compute(self, noc=None, boc=None):
+    def compute(self, noc=None, boc=None, bond00=None, numbranch=[], branch=[]):
         if(noc ==None):
             noofc = self.nooc.value()
         else:
@@ -335,9 +398,11 @@ class MyAppv(Ui_Dialog):
             bonds = self.bondui.value()
         else:
             bonds=boc
+            
         print(noofc)
         print(bonds)
-        restxt = self.chkBond(bonds, noofc)
+        print(bond00)
+        restxt = self.chkBond(bonds, noofc, bond00, numbranch, branch)
         print(restxt + "jj")
         leng = len(restxt)
         if(leng>=32):
@@ -346,7 +411,7 @@ class MyAppv(Ui_Dialog):
         else:
             self.output.setFont(QtGui.QFont('Courier New', 14, weight=QtGui.QFont.Bold))
         self.output.setText(restxt)
-    
+
     def alkane(self, noofc):
         self.pushButton_3.setEnabled(False)
         if (noofc == 1):
@@ -359,7 +424,7 @@ class MyAppv(Ui_Dialog):
         return answer
 
 
-    def alkene(self, noofc):
+    def alkene(self, noofc, bond00):
         if (noofc == 1):
 
             answer = "Not possible"
@@ -369,14 +434,27 @@ class MyAppv(Ui_Dialog):
             print(answer)
         else:
             k = 1
-
             answer = BOND[0] + BOND[1] * (noofc - 2) + TERMINAL[0]
-            counter3 = 0
+            for i in bond00:
+                    
+                counter = int(i)
+                print(counter, '=', noofc)
+                if((counter==noofc)or(counter==(noofc-1))or(counter==1)):
+                    answer = "Error! Double bonds cannot be placed at terminal ends"
+                    break
+                
+                answer = answer[:(4 * (counter - 1))] + \
+                                BOND[2] + answer[(4 * (counter)):]
+
+                answer = answer.replace("=CH2-", "=CH1-")
+                answer = answer.replace("=CH1=", "= C =")
+                print(answer)
+            
             self.placer.setMinimum(2)
             self.placer.setMaximum(noofc - 2)
             self.placer.setEnabled(True)
             self.pushButton_3.setEnabled(True)
-            """.
+            """
             while (k == 1):
 
                 counter = int(input(
@@ -411,20 +489,43 @@ class MyAppv(Ui_Dialog):
         return answer
 
 
-    def alkyne(self, noofc):
+    def alkyne(self, noofc, bond00=None):
         if (noofc == 1):
 
             answer = "Not possible"
             print(answer)
         elif (noofc == 2):
-            answer = "CH1≡CH1"
+            answer = "CH ≡ CH"
             print(answer)
         else:
             k = 1
-
             answer = BOND[0] + BOND[1] * (noofc - 2) + TERMINAL[0]
             counter3 = 0
-            
+            tmp_i=-1
+            for i in bond00:
+
+                counter = int(i)
+                if(counter-tmp_i==1):
+                    print("Triple bonds cannot be placed near by because of Carbon tetravalency")
+                    answer = "Triple bonds cannot be placed near by because of Carbon tetravalency"
+                    break
+                else:
+                    tmp_i = counter
+                print(counter, '=', noofc)
+                if((counter==noofc)or(counter==(noofc-1))or(counter==1)):
+                    answer = "Error! Triple bonds cannot be placed at terminal ends"
+                    break
+
+                answer = answer[:(4 * (counter - 1))] + \
+                            BOND[4] + answer[(4 * (counter)):]
+                answer = answer.replace("≡CH2-", "≡ C -")
+
+                if (answer[(4 * (counter - 1) + 3):(4 * (counter - 1) + 8)] == "≡CH2-"):
+                    print("≡")
+                    answer = answer[:(4 * (counter - 1) + 3)] + \
+                        "≡ C -" + answer[(4 * (counter - 1) + 8):]
+
+
             counter3 = 0
             self.placer.setMinimum(2)
             self.placer.setMaximum(noofc - 2)
@@ -471,25 +572,106 @@ class MyAppv(Ui_Dialog):
                         counter3 = counter
             """
         return answer
-    
 
-    def chkBond(self, bonds, noofc):
 
+    def chkBond(self, bonds, noofc, bond00, numbranch=[], branch=[]):
+        branchesList = ["CH3", "CH2-CH3", "CH2-CH2-CH3", "CH2-CH2-CH2-CH3", "CH2-CH2-CH2-CH2-CH3"]
+        counterX =1
         if (bonds == 1):
             res = self.alkane(noofc)
-            return res
+            
+            
 
         elif (bonds == 2):
-            res = self.alkene(noofc)
-            return res
-        elif (bonds == 3):
+            res = self.alkene(noofc, bond00)
             
-            res = self.alkyne(noofc)
-            return res
+        elif (bonds == 3):
+            res = self.alkyne(noofc, bond00)
+            
         else:
             res = "Bye Bye!"
             print(res)
-            return res
+        for i in zip(numbranch, branch):
+            nooc00 = res.count("C")
+            
+            print("LOG:", branch, "+ RAW")
+            branch00 = branch[counterX-1]
+            print("LOG:", branch00, "+ COOKED")
+            if(branch00 == "methyl"):
+                branchConv = branchesList[0]
+            elif(branch00 == "ethyl"):
+                branchConv = branchesList[1]
+            elif(branch00 == "propyl"):
+                branchConv = branchesList[2]
+            elif(branch00 == "butyl"):
+                branchConv = branchesList[3]
+            elif(branch00 == "pentyl"):
+                branchConv = branchesList[4]
+            elif(branch00 == "hexyl"):
+                branchConv = branchesList[5]
+            else:
+                branchConv = "Longer Carbon chain"
+            spac = " "
+            print("LOG: i[0]=",i[0])
+            if(i[0]== 1) or (i[0]==nooc00):
+                msg = "Error! Cannot place groups at terminal carbon molecules"
+                res = msg
+                print(msg)
+                break
+            print("LOG: res = ", res)
+            branchPos = i[0]*4
+            theAlterer = res[(branchPos-4):branchPos]
+            print("LOG: theAlterer = ", theAlterer)
+            nooh = theAlterer[1:]
+            print("LOG: nooh=", nooh)
+            if(nooh[0]=="C"):
+                msg = "ERROR: Carbon valency of 4 is completely utilized."
+                print(msg)
+                res = msg
+                return res
+            
+            elif(nooh[0]=="H"):
+                print("LOG: Detected H",nooh[1])
+                if(nooh[1]):
+                    
+                    print("LOG: Detected Numeric value for H")
+                    
+                    theAlterer = theAlterer[:2]+str(int(theAlterer[2])-1)+theAlterer[3:]
+                    theAlterer  = theAlterer.replace("CH0"," C ")
+                else:
+                    print(msg)
+                    res = msg
+                    return res
+            res = res[:(branchPos-4)]+theAlterer+res[branchPos:]    
+            if(counterX%2 == 1):
+                if(i[0] == int(ceil((nooc00/2) ))):
+                    
+                    print("LOG : DIVIDER IS CENTERED ")
+                    self.output_6.setText("\\")
+                    self.output_2.setText(" "+ spac*(len(branchConv)) +branchConv)
+                
+                elif(i[0] > int(ceil((nooc00/2) ))):
+                    self.output_2.setText(spac + spac*(len(branchConv)) +spac*(8*(i[0]-int(ceil((nooc00/2)))))+branchConv)
+                    self.output_6.setText(spac*8*(i[0]-int(ceil((nooc00/2))))+"\\")
+                elif(i[0] < int(ceil((nooc00/2) ))):
+                    self.output_2.setText(spac + spac*(len(branchConv)) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-i[0])))
+                    self.output_6.setText("\\" + spac*(8*(int(ceil((nooc00/2)))-i[0])))
+            elif(counterX%2==0):
+                if(i[0] == int(ceil((nooc00/2) ))):
+                    
+                    print("LOG : DIVIDER IS CENTERED ")
+                    self.output_4.setText("/")
+                    self.output_3.setText(" "+ spac*(len(branchConv)) +branchConv)
+                
+                elif(i[0] > int(ceil((nooc00/2) ))):
+                    self.output_3.setText(spac + spac*(len(branchConv)) +spac*(8*(i[0]-int(ceil((nooc00/2)))))+branchConv)
+                    self.output_4.setText(spac*8*(i[0]-int(ceil((nooc00/2))))+"/")
+                elif(i[0] < int(ceil((nooc00/2) ))):
+                    self.output_3.setText(spac + spac*(len(branchConv)) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-i[0])))
+                    self.output_4.setText("/" + spac*(8*(int(ceil((nooc00/2)))-i[0])))
+
+            counterX+=1
+        return res
 
 
 

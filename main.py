@@ -11,6 +11,7 @@ from mainui import Ui_Dialog
 import os
 from math import ceil
 import sys
+import webbrowser
 from PyQt5 import QtCore, QtGui, uic, QtWidgets
 TERMINAL = ["CH3", "CH2"]
 BOND = ["CH3-", "CH2-", "CH1=", "CH1-", " C ≡"]
@@ -255,7 +256,7 @@ class MyAppv(Ui_Dialog):
         # self.bondui.sliderChange.connect()
         self.pushButton.pressed.connect(self.compute)
         self.pushButton_2.pressed.connect(self.quitme)
-        
+        self.abt.pressed.connect(self.openme)
         self.placer.sliderMoved.connect(self.sliderValueChange)
         self.placer.sliderReleased.connect(self.sliderValueChange)
         self.radioButton.pressed.connect(self.radio1)
@@ -266,7 +267,11 @@ class MyAppv(Ui_Dialog):
         self.pushButton_3.setEnabled(False)
         self.pushButton_3.pressed.connect(self.bondchk)
         self.pushButton_4.pressed.connect(self.transalate)
-        
+
+    def openme(self):
+        webbrowser.open("https://srevinsaju.wixsite.com/srevinsaju")
+    def opengit(self):
+        webbrowser.open("https://github.com/srevinsaju/carbonic")
     def transalate(self):
         inpu = self.textEdit.toPlainText()
         noofc, bondo, bond01, numbranch, branch = convertor(inpu)

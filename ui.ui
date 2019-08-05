@@ -42,6 +42,12 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>Drag the slider to choose between alkane, alkene and alkyne</string>
+   </property>
+   <property name="toolTipDuration">
+    <number>2</number>
+   </property>
    <property name="minimum">
     <number>1</number>
    </property>
@@ -64,7 +70,7 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>254</x>
+     <x>456</x>
      <y>420</y>
      <width>91</width>
      <height>23</height>
@@ -81,7 +87,7 @@
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>348</x>
+     <x>550</x>
      <y>420</y>
      <width>31</width>
      <height>23</height>
@@ -98,7 +104,7 @@
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>68</x>
+     <x>270</x>
      <y>420</y>
      <width>181</width>
      <height>23</height>
@@ -122,6 +128,12 @@
      <width>491</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Drag the slider to chose the position of the double / triple bond.</string>
+   </property>
+   <property name="toolTipDuration">
+    <number>2</number>
    </property>
    <property name="minimum">
     <number>2</number>
@@ -290,7 +302,7 @@
     </rect>
    </property>
    <property name="toolTip">
-    <string>About</string>
+    <string>Created by Srevin Saju (@srevinsaju). Licensed under Affereo GPL v3.0 License. Read README.md for more information</string>
    </property>
    <property name="toolTipDuration">
     <number>2</number>
@@ -413,6 +425,12 @@ background-color: rgb(212, 212, 212);</string>
      <bold>true</bold>
     </font>
    </property>
+   <property name="toolTip">
+    <string>Enter the carbon IUPAC name. use 2-pentene for double bond on second carbon atom. Use [2-methyl, 3-ethyl]pentane for methyl group on second atom and ethyl group on third carbon atom respectively.</string>
+   </property>
+   <property name="toolTipDuration">
+    <number>2</number>
+   </property>
    <property name="placeholderText">
     <string extracomment="eg: heptane"/>
    </property>
@@ -428,6 +446,12 @@ background-color: rgb(212, 212, 212);</string>
      <width>61</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="toolTip">
+    <string>Press GO to compute from IUPAC name</string>
+   </property>
+   <property name="toolTipDuration">
+    <number>1</number>
    </property>
    <property name="text">
     <string>GO</string>
@@ -516,6 +540,12 @@ background-color: rgb(63, 63, 63,0);</string>
      <bold>true</bold>
     </font>
    </property>
+   <property name="toolTip">
+    <string>Output box</string>
+   </property>
+   <property name="toolTipDuration">
+    <number>2</number>
+   </property>
    <property name="styleSheet">
     <string notr="true">color: rgb(248, 248, 248);
 background-color: rgb(63, 63, 63, 0);</string>
@@ -559,6 +589,29 @@ background-color: rgb(63, 63, 63, 0);</string>
    </property>
    <property name="wordWrap">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="abt_2">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>420</y>
+     <width>91</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="toolTip">
+    <string>View the Readme.md on Github, the leader in opensource software for free</string>
+   </property>
+   <property name="toolTipDuration">
+    <number>2</number>
+   </property>
+   <property name="text">
+    <string>Learn more</string>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>images/github.logo.svg</normaloff>images/github.logo.svg</iconset>
    </property>
   </widget>
  </widget>

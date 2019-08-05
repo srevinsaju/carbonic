@@ -6,6 +6,8 @@ A simple python carbon engine which introduces as many bonds (single, double or 
 # How to use?
 
 ![help](images/screenshot00.png)
+
+
 A] Option A: Enter the details to generate the Carbon bond structure
 * In the first box Enter the number of Carbon Atoms. You can either increase the number with 
 the arrows or enter the value manually.

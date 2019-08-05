@@ -405,7 +405,7 @@ class MyAppv(Ui_Dialog):
         restxt = self.chkBond(bonds, noofc, bond00, numbranch, branch)
         print(restxt + "jj")
         leng = len(restxt)
-        if(leng>=32):
+        if(leng>=50):
 
             self.output.setFont(QtGui.QFont('Courier New', 10, weight=QtGui.QFont.Bold))
         else:

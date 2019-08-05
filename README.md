@@ -37,6 +37,18 @@ b) Linux or Mac: `pip3 install PyQt5`
 ## Contribute
 Small AIs are made great with societal support. Pull Requests, Contributors and Issues help devleop great software from scratch. Your support is highly appreciated! 
 
+
+## Changelog
+
+###05082019 0924 GMT+530
+* Added Transalator, to transalate normal IUPAC names to carbond bonds with length
+* Extended UI to prevent glitches
+* Added Carbonic logo .svg (licesnsed under Creative Commons License Attributions 4.0, made with Inkscape)
+* Added groups like -methyl, -ethyl, -propyl groups to extend the carbonic engne support
+* Added prefix numbers to place double/triple bonds. Prefix nmbers for alkane compunds are deprecated.
+
+
+
 ## License
     Copyright (C) 2019 Srevin Saju (srevinsaju)
 

@@ -1,2 +1,7 @@
 theme: jekyll-theme-cayman
-title: CARBONIC
+title: Carbonic
+plugins:
+  - jekyll-seo-tag
+
+webmaster_verifications:
+  google: TEoM2-clv9NyZFINNVOiQPdGvn7Af7QASeVt29YFCzU

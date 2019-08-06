@@ -1,6 +1,8 @@
-<head>
-<meta name="google-site-verification" content="TEoM2-clv9NyZFINNVOiQPdGvn7Af7QASeVt29YFCzU" />
-</head>
+<html>
+    <head>
+        <meta name="google-site-verification" content="TEoM2-clv9NyZFINNVOiQPdGvn7Af7QASeVt29YFCzU" />
+    </head>
+</html>
 
 # carbonic
 

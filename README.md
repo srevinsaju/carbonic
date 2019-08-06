@@ -19,8 +19,10 @@ changing in the small text box. It indicates the carbon compound on which, we wo
 * Each time the **COMPUTE** button is pressed, the whole equation is resetted to the default structure.
 
 B] Option B: Enter the IUPAC name of the carbon compound
-![help2](images/screenshot01.png)
+
 * Select the RadioButton - 'Enter the IUPAC name..."
+
+![help2](images/screenshot01.png)
 * In the textbox, you can enter the IUPAC name of the Carbon compound. For alkene-alkyne compounds, you can use *2-pentene* for a five atom carbon structure with double bond on second carbon atom. If you wish to add groups like *methyl, ethyl, propyl...*, you have to enter it within a square bracket, such as, *"[2-methyl, 3-ethyl]2-pentene"* ![example](images/screenshot02.png)to create a methyl group on second atom. 
 
 * After typing the IUPAC name, hit the "GO" button to the right, and your equation is ready!

@@ -2,7 +2,10 @@
 # carbonic
 
 A simple python carbon engine which introduces as many bonds (single, double or triple) as required. **carbonic** algorithm checks for exception through gui and makes safe alteration to the structure.
+
+
 ![carbonic](images/screenshot.png)
+
 
 # How to use?
 

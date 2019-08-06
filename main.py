@@ -257,6 +257,7 @@ class MyAppv(Ui_Dialog):
         self.pushButton.pressed.connect(self.compute)
         self.pushButton_2.pressed.connect(self.quitme)
         self.abt.pressed.connect(self.openme)
+        self.abt_2.pressed.connect(self.opengit)
         self.placer.sliderMoved.connect(self.sliderValueChange)
         self.placer.sliderReleased.connect(self.sliderValueChange)
         self.radioButton.pressed.connect(self.radio1)
@@ -271,7 +272,7 @@ class MyAppv(Ui_Dialog):
     def openme(self):
         webbrowser.open("https://srevinsaju.wixsite.com/srevinsaju")
     def opengit(self):
-        webbrowser.open("https://github.com/srevinsaju/carbonic")
+        webbrowser.open("https://srevinsaju.github.io/carbonic/")
     def transalate(self):
         inpu = self.textEdit.toPlainText()
         noofc, bondo, bond01, numbranch, branch = convertor(inpu)

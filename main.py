@@ -12,7 +12,7 @@ import os
 from math import ceil
 import sys
 import webbrowser
-from PyQt5 import QtCore, QtGui, uic, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 TERMINAL = ["CH3", "CH2"]
 BOND = ["CH3-", "CH2-", "CH1=", "CH1-", " C ≡"]
 counter2 = 1

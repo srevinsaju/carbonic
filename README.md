@@ -26,12 +26,13 @@ B] Option B: Enter the IUPAC name of the carbon compound
 
 * Select the RadioButton - 'Enter the IUPAC name..."
 
-![help2](images/screenshot01.png)
+<image src="images/screenshot01.png" width=100%></image>
+
 * In the textbox, you can enter the IUPAC name of the Carbon compound. For alkene-alkyne compounds, you can use *2-pentene* for a five atom carbon structure with double bond on second carbon atom. If you wish to add groups like *methyl, ethyl, propyl...*, you have to enter it within a square bracket, such as, *"[2-methyl, 3-ethyl]2-pentene"* 
 to create a methyl group on second atom. 
 
 
-![example](images/screenshot02.png)
+<image src="images/screenshot02.png" width=100%></image>
 
 * After typing the IUPAC name, hit the "GO" button to the right, and your equation is ready!
 

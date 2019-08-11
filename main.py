@@ -274,7 +274,7 @@ class MyAppv(Ui_Dialog):
     def opengit(self):
         webbrowser.open("https://srevinsaju.github.io/carbonic/")
     def transalate(self):
-        inpu = self.textEdit.toPlainText()
+        inpu = self.textEdit.text()
         noofc, bondo, bond01, numbranch, branch = convertor(inpu)
         self.compute(noofc, bondo, bond01, numbranch, branch)
         

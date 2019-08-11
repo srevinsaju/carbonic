@@ -14,8 +14,8 @@
    <string>carboncompunds - by srevinsaju</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>g960.png</normaloff>g960.png</iconset>
+   <iconset resource="res/res.qrc">
+    <normaloff>:/res/g960.ico</normaloff>:/res/g960.ico</iconset>
   </property>
   <widget class="QSpinBox" name="nooc">
    <property name="geometry">
@@ -80,8 +80,8 @@
     <string>COMPUTE</string>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>g960.png</normaloff>g960.png</iconset>
+    <iconset resource="res/res.qrc">
+     <normaloff>:/res/logo.svg</normaloff>:/res/logo.svg</iconset>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_2">
@@ -97,8 +97,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>close.png</normaloff>close.png</iconset>
+    <iconset resource="res/res.qrc">
+     <normaloff>:/res/close.png</normaloff>:/res/close.png</iconset>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_3">
@@ -283,7 +283,7 @@
     <enum>Qt::PlainText</enum>
    </property>
    <property name="pixmap">
-    <pixmap>g960.png</pixmap>
+    <pixmap resource="res/res.qrc">:/res/logo.svg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -311,8 +311,8 @@
     <string/>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>ss-branding.png</normaloff>ss-branding.png</iconset>
+    <iconset resource="res/res.qrc">
+     <normaloff>:/res/ss-branding.png</normaloff>:/res/ss-branding.png</iconset>
    </property>
   </widget>
   <widget class="QLabel" name="output">
@@ -405,36 +405,6 @@ background-color: rgb(212, 212, 212);</string>
     <string>Enter the IUPAC name (experimental, only Alkane upto 100)</string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="textEdit">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>270</y>
-     <width>501</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Courier New</family>
-     <pointsize>10</pointsize>
-     <weight>75</weight>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="toolTip">
-    <string>Enter the carbon IUPAC name. use 2-pentene for double bond on second carbon atom. Use [2-methyl, 3-ethyl]pentane for methyl group on second atom and ethyl group on third carbon atom respectively.</string>
-   </property>
-   <property name="toolTipDuration">
-    <number>2</number>
-   </property>
-   <property name="placeholderText">
-    <string extracomment="eg: heptane"/>
-   </property>
-  </widget>
   <widget class="QPushButton" name="pushButton_4">
    <property name="enabled">
     <bool>false</bool>
@@ -457,8 +427,8 @@ background-color: rgb(212, 212, 212);</string>
     <string>GO</string>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>g960.png</normaloff>g960.png</iconset>
+    <iconset resource="res/res.qrc">
+     <normaloff>:/res/logo.svg</normaloff>:/res/logo.svg</iconset>
    </property>
   </widget>
   <widget class="QLabel" name="output_2">
@@ -610,11 +580,45 @@ background-color: rgb(63, 63, 63, 0);</string>
     <string>Learn more</string>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>images/github.logo.svg</normaloff>images/github.logo.svg</iconset>
+    <iconset resource="res/res.qrc">
+     <normaloff>:/res/github.logo.svg</normaloff>:/res/github.logo.svg</iconset>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="textEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>270</y>
+     <width>491</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Courier New</family>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-color: rgb(255, 255, 255);
+gridline-color: rgb(255, 255, 255);</string>
+   </property>
+   <property name="placeholderText">
+    <string>eg: [2-methyl,3-ethyl]4-dodecene</string>
+   </property>
+   <property name="cursorMoveStyle">
+    <enum>Qt::VisualMoveStyle</enum>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="res/res.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -6,6 +6,9 @@ A simple python carbon engine which introduces as many bonds (single, double or 
 
 ![carbonic](images/screenshot.png)
 
+# Download
+* Download the latest release for Windows, here on https://github.com/srevinsaju/carbonic/releases/download/v1.2.11082019-canary/carbonic.exe
+
 
 # How to use?
 

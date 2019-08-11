@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="res">
+    <file>github.logo.svg</file>
+    <file>carbonic-branding.png</file>
+    <file>close.png</file>
+    <file>g960.ico</file>
+    <file>logo.svg</file>
+    <file>ss-branding.png</file>
+  </qresource>
+</RCC>

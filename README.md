@@ -7,9 +7,16 @@ A simple python carbon engine which introduces as many bonds (single, double or 
 ![carbonic](images/screenshot.png)
 
 # Download
+## Windows (7,8,8.1,10 [1501 - 19H1])
 * Download the latest release for Windows, [here](https://github.com/srevinsaju/carbonic/releases/download/v1.2.11082019-canary/carbonic.exe)
+* Double click carbonic.exe, and enjoy!
 
+## Linux
+* Hey Linux users, I will update the Linux app for you soon.. Keep waiting or download the source code.
 
+## Mac
+* Sorry guys! No compiled software for you.. I do not own a Mac device and hence can't compile for you. Next time :(
+    
 # How to use?
 
 ![help](images/screenshot00.png)

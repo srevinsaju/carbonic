@@ -334,7 +334,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "carboncompunds - by srevinsaju"))
+        Dialog.setWindowTitle(_translate("Dialog", "carbonic"))
         self.bondui.setToolTip(_translate("Dialog", "Drag the slider to choose between alkane, alkene and alkyne"))
         self.pushButton.setText(_translate("Dialog", "COMPUTE"))
         self.pushButton_3.setToolTip(_translate("Dialog", "Place the Bond in Alkene and Alkyne type and then update the equation in the output box"))

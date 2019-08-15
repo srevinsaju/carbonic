@@ -89,7 +89,9 @@ I am neither a chemistry university student nor a chemistry teacher. With the li
 
 ## Changelog
 
-### **v1.2** 05082019 0924 GMT+530
+### 
+
+### **v1.2**-11082019 0924 GMT+530
 * Added Transalator, to transalate normal IUPAC names to carbond bonds with length
 * Extended UI to prevent glitches
 * Added Carbonic logo .svg (licesnsed under Creative Commons License Attributions 4.0, made with Inkscape)

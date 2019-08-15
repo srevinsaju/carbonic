@@ -1240,6 +1240,7 @@ if __name__ == "__main__":
     time.sleep(2)
     # app.aboutToQuit().connect(app.deleteLater)
     window = QtWidgets.QMainWindow()
+    
     progg = MyAppv(window)
-    window.show()
+    window.show(); splash.hide()
     sys.exit(appo.exec_())

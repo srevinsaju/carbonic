@@ -1,5 +1,6 @@
 
-# carbonic
+#  carbonic
+<image src="res/carbonic-branding.png" width=100%></image>
 
 A simple python carbon engine which introduces as many bonds (single, double or triple) as required. **carbonic** algorithm checks for exception through gui and makes safe alteration to the structure.
 
@@ -91,7 +92,7 @@ I am neither a chemistry university student nor a chemistry teacher. With the li
 
 ### 
 
-### **v1.2**-11082019 0924 GMT+530
+### **v1.2**-11082019-canary 0924 GMT+530
 * Added Transalator, to transalate normal IUPAC names to carbond bonds with length
 * Extended UI to prevent glitches
 * Added Carbonic logo .svg (licesnsed under Creative Commons License Attributions 4.0, made with Inkscape)

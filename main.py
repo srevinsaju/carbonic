@@ -5,6 +5,29 @@ THIS IS MAIN MODULE FOR GUI INTEGRATION PORT.
 
 ALL CODE IS LICENSED UNDER GNU-GPL LICENSE. READ LICENSE FOR MORE INFORMATION
 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+#    this list of conditions and the following disclaimer in the documentation
+#    and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+
+
 """
 # imports
 from mainui import Ui_Dialog
@@ -34,7 +57,7 @@ def convertor(inp):
     inp = inp.strip()
     inp = inp.lowercase()
     tmpinp = inp
-    
+
     if(inp.endswith("ane")):
         bond_int = 1
     elif(inp.endswith("ene")):
@@ -44,14 +67,14 @@ def convertor(inp):
     else:
         bond_int = 0
         print("ERROR: INVALID")
-    
+
     """
 
 def convertor(inp):
     func = None
     inp = inp.strip()
     inp = inp.lower()
-    cyclic = False 
+    cyclic = False
     benzeneChildBool = False
     addOnBranches = []
     addOnBranchesNum = []
@@ -60,7 +83,7 @@ def convertor(inp):
     count = 1
     print(inp.find("["), " is INDEX")
     if((inp.find("["))!=-1):
-        
+
         for i in listOfAdditionalStuff:
             if(inp.find(i)==-1):
                 print("LOG: passed", i)
@@ -74,19 +97,19 @@ def convertor(inp):
                     try:
                         addOnNum = int(inp[inp.find("[")+1:indic-1])
                     except ValueError:
-                        
+
                         print("WARNING: Getting out of loop")
                         break
-                        
+
                     print("LOG : AddOnNum is ", addOnNum)
                     addOnBranchesNum.append(addOnNum)
                     addOnBranches.append(i)
                     inp=inp[(indic+len(i)+1):]
-                    
+
                     count+=1
                     print("LOG: inp:", inp)
-                
-                
+
+
     else:
         print("HOHO")
     print(inp)
@@ -96,9 +119,11 @@ def convertor(inp):
     tmpinp = inp
     # initialize bond00 value to prevent NameError
     bond00 = []
+
+    # check if the given name has halogen names
     haloIndexConv = []
     haloGroupConv = []
-    # check if the given name has halogen names
+
     halogens = ["bromo", "fluoro", "iodo", "chloro"]
     for halogen in halogens:
         if inp.find(halogen)>-1:
@@ -107,22 +132,50 @@ def convertor(inp):
                 haloIndex = inp.find(halogen)
                 if inp[haloIndex-1:haloIndex]=="-":
                     print("LOG: Found numeric value")
+                    print("LOG: inp @ halo", inp)
                     if(inp[0]==","):
+                        print("LOG: comma pased in halo section")
                         inp=inp[1:]
+                        print("LOG: inp after comma @ halo", inp)
+                        continue
+
+                    else:
+                        print("LOG: No comma in ", inp)
                     try:
-                        print("LOG: inp[:haloIndex-2] is ", inp[:haloIndex-1])
+                        print("LOG: inp[:haloIndex-1] is ", inp[:haloIndex-1])
                         haloIndexConv.append(int(inp[:haloIndex-1]))
                         haloGroupConv.append(halogen)
                         inp = inp[haloIndex+len(halogen):]
                         print("LOG: inp is", inp)
                     except ValueError:
-                        print("ERROR: Not a numeric value.")
+                        print("LOG: trying once again")
+                        try:
+                            print("LOG: inp[:haloIndex-2] is ", inp[:haloIndex-2])
+                            haloIndexConv.append(int(inp[:haloIndex-2]))
+                            haloGroupConv.append(halogen)
+                            inp = inp[haloIndex-1+len(halogen):]
+                            print("LOG: inp is", inp)
+                        except ValueError:
+                            try:
+                                print("LOG: inp[:haloIndex-3] is ", inp[:haloIndex-3])
+                                haloIndexConv.append(int(inp[:haloIndex-3]))
+                                haloGroupConv.append(halogen)
+                                inp = inp[haloIndex-2+len(halogen):]
+                                print("LOG: inp is", inp)
+                            except ValueError:
+                                print("LOG: Really sorry about that")
+                                break
                 else:
                     print("LOG: No halo value found ")
-                
+                    haloIndexConv.append(1)
+                    haloGroupConv.append(halogen)
+                    inp = inp[haloIndex+len(halogen):]
+                    print("LOG: inp is", inp)
+                    break
+
         else:
             continue
-        
+
     print("LOG: haloIndexConv:", haloIndexConv)
     # read the #- value of the IUPAC name
     for i in tmpinp:
@@ -148,10 +201,10 @@ def convertor(inp):
                 break
             else:
                 print("NONO", i)
-        
+
         except IndexError:
             print("No Index, passing")
-       
+
     # Check the carbon compound is alkane, alkene or alkyne
     if(inp.endswith("ane")):
         if(inp.startswith("cyclo")):
@@ -159,23 +212,23 @@ def convertor(inp):
             bond_int = 4
             inp = inp[5:]
             print("LOG: Logging Cyclic inp=", inp)
-            cyclic = True 
+            cyclic = True
         else:
             bond_int = 1
             print("LOG: alkane")
         restOfInp = inp.partition("ane")
     elif(inp.endswith("ene")):
         print("alken")
-        
+
         for i in BenzeneChild:
             if (inp.startswith(str(i))):
                 childOfBenzeneType = i
                 benzeneChildBool = True
                 break
-    
+
         bond_int = 2
         restOfInp = inp.partition("ene")
-        
+
     elif(inp.endswith("yne")):
         bond_int = 3
         print("LOG: alkyne")
@@ -196,10 +249,10 @@ def convertor(inp):
         bond_int = 6
         print("LOG: Detected Aldehyde")
         restOfInp = inp.partition("al")
-    
+
     else:
         bond_int = 0
-        
+
         print("ERROR: INVALID")
         return "ERROR 344"
     restOfInp = list(restOfInp)
@@ -210,7 +263,7 @@ def convertor(inp):
         hect = True
     else:
         hect = False
-    
+
     if(restOfInp[0].find("triacont")>-1):
         try:
             noofc0 +=30
@@ -253,14 +306,14 @@ def convertor(inp):
             noofc0 +=90
         except UnboundLocalError:
             print("ERROR")
-    
-    
+
+
     if(restOfInp[0].startswith("meth")or restOfInp[0].startswith("un")or restOfInp[0].startswith("hen")):
         if(restOfInp[0].startswith("meth")or restOfInp[0].startswith("hen")):
             noofc0 += 1
         else:
             noofc0 += 1 #*restOfInp[0].count("un")
-        
+
     if(restOfInp[0].startswith("eth")or restOfInp[0].startswith("do")):
         if(restOfInp[0].startswith("eth")):
             noofc0 += 2
@@ -288,7 +341,7 @@ def convertor(inp):
         noofc0 += 9
     if(restOfInp[0].startswith("dec")):
         noofc0 += 0
-    
+
     if(restOfInp[0].find("dec")>-1):
         try:
             noofc0 = 10+noofc0
@@ -301,13 +354,13 @@ def convertor(inp):
             print("ERROR")
     if hect:
         noofc0 = 100+noofc0
-    
+
     restOfInp = restOfInp[:-1]
     print(restOfInp)
     print(noofc0)
-    
-    return noofc0, bond_int, bond00, addOnBranchesNum, addOnBranches, benzeneChildBool
-    
+
+    return noofc0, bond_int, bond00, addOnBranchesNum, addOnBranches, benzeneChildBool, haloIndexConv, haloGroupConv
+
 def addfunctionalgrp(noofc):
     functionalgrp = input(
         "Enter the type of functional group you would like to append to the current Carbon chain ---> ")
@@ -364,11 +417,11 @@ class MyAppv(Ui_Dialog):
         self.output_hi2_2.setText("")
         self.output_hi1_2.setText("")
         self.output_lo1_2.setText("")
-        
+
         inpu = self.textEdit.text()
-        noofc, bondo, bond01, numbranch, branch, benzylBool = convertor(inpu)
-        self.compute(noofc, bondo, bond01, numbranch, branch, benzylBool)
-        
+        noofc, bondo, bond01, numbranch, branch, benzylBool, haloIndexConv, haloGroupConv = convertor(inpu)
+        self.compute(noofc, bondo, bond01, numbranch, branch, benzylBool, haloIndexConv, haloGroupConv)
+
 
     def radio1(self):
         self.textEdit.setEnabled(False)
@@ -379,7 +432,7 @@ class MyAppv(Ui_Dialog):
         self.placer.setEnabled(True)
         self.pushButton.setEnabled(True)
         self.pushButton_4.setEnabled(False)
-        
+
     def radio2(self):
         self.textEdit.setEnabled(True)
         self.radioButton_2.setChecked(True)
@@ -389,7 +442,7 @@ class MyAppv(Ui_Dialog):
         self.placer.setEnabled(False)
         self.pushButton.setEnabled(False)
         self.pushButton_4.setEnabled(True)
-        
+
     def switchoff(self):
         print(self.radioButton.isChecked())
         print(self.radioButton_2.isChecked())
@@ -400,7 +453,7 @@ class MyAppv(Ui_Dialog):
             self.nooc.setEnabled(True)
             self.bondui.setEnabled(True)
             self.placer.setEnabled(True)
-            
+
         elif(self.radioButton_2.isChecked()):
             self.textEdit.setEnabled(True)
             self.radioButton_2.setChecked(True)
@@ -408,8 +461,8 @@ class MyAppv(Ui_Dialog):
             self.nooc.setEnabled(False)
             self.bondui.setEnabled(False)
             self.placer.setEnabled(False)
-            
-            
+
+
     def quitme(self):
         sys.exit(0)
 
@@ -423,7 +476,7 @@ class MyAppv(Ui_Dialog):
         else:
             smCarbon = "NONE"
         self.bondtxt.setText(str(smCarbon))
-    
+
     def sliderValueChange(self):
         self.placertxt.setText(str(self.placer.value()))
     def bondchk(self):
@@ -486,7 +539,7 @@ class MyAppv(Ui_Dialog):
         else:
             self.placer.setMaximum(noofcc - 2)
 
-    def compute(self, noc=None, boc=None, bond00=None, numbranch=[], branch=[], benzylBool=False):
+    def compute(self, noc=None, boc=None, bond00=None, numbranch=[], branch=[], benzylBool=False, haloIndexConv=[], haloGroupConv=[]):
         if(noc ==None):
             noofc = self.nooc.value()
         else:
@@ -495,11 +548,11 @@ class MyAppv(Ui_Dialog):
             bonds = self.bondui.value()
         else:
             bonds=boc
-            
+
         print("LOG: noofc=", noofc)
         print("LOG: bonds=", bonds)
         print("LOG: bond00=", bond00)
-        restxt = self.chkBond(bonds, noofc, bond00, numbranch, branch, benzylBool)
+        restxt = self.chkBond(bonds, noofc, bond00, numbranch, branch, benzylBool, haloIndexConv, haloGroupConv)
         print("LOG: restext placeholder:", restxt)
         leng = len(restxt)
         if(leng>=50):
@@ -518,8 +571,12 @@ class MyAppv(Ui_Dialog):
 
             answer = BOND[0] + BOND[1] * (noofc - 2) + TERMINAL[0]
         print(answer)
+        self.output_hi1_2.setText(" "*len(answer))
+        self.output_hi2_2.setText(" "*len(answer))
+        self.output_lo1_2.setText(" "*len(answer))
+        self.output_lo2_2.setText(" "*len(answer))
         return answer
-    
+
     def ketone(self, noofc, bond00):
         if(bond00 == []):
             bond00 =[2]
@@ -536,36 +593,36 @@ class MyAppv(Ui_Dialog):
             k = 1
             answer = BOND[0] + BOND[1] * (noofc - 2) + TERMINAL[0]
             for i in bond00:
-                    
+
                 counter = int(i)
                 print("LOG:", counter, '=', noofc)
                 if((counter==noofc)or(counter==1)):
                     answer = "Error! Ketone functional group cannot be placed at the terminal ends of a carbon structure."
                     break
-                
+
                 answer = answer[:(4 * (counter - 1))] + \
                                 "CO -" + answer[(4 * (counter)):]
 
                 answer = answer.replace("=CH₂-", "=CH₁-")
                 answer = answer.replace("=CH₁=", "= C =")
                 print(answer)
-            
+
             self.placer.setMinimum(2)
             self.placer.setMaximum(noofc - 2)
             self.placer.setEnabled(True)
             self.pushButton_3.setEnabled(True)
         return answer
-    
+
     def aldehyde(self, noofc, bond00):
         if not bond00:
             bond00 = [noofc-1]
             ans = self.alkane(noofc-1)
         else:
-             
+
             ans = self.alkene(noofc-1, bond00, True)
-            
-        
-        
+
+
+
         branchConv_aldehyde = "CHO"
         spac = " "
         rndcnt = 1
@@ -577,7 +634,7 @@ class MyAppv(Ui_Dialog):
             nooc00 = noofc-1
             counter = int(i)
             print("LOG: nooc00", nooc00)
-           
+
             print(counter, '=', noofc)
             if(counter==1):
                 ans = "CHO-CH₂-"+ans[4:]
@@ -593,7 +650,7 @@ class MyAppv(Ui_Dialog):
                 self.output_hi2_2.setText(len(ans)*spac)
                 self.output_hi1_2.setText(len(ans)*spac)
                 continue
-            
+
             if((counter%2==0)and (1<counter<noofc-1)):
                 print("LOG: using lo")
                 self.output_lo2_2.setText(self.output_lo2_2.text()[:(4 * (counter - 1))] + \
@@ -608,14 +665,14 @@ class MyAppv(Ui_Dialog):
                     " ╷  " + self.output_hi1_2.text()[(4 * (counter)):])
             else:
                 print("ERROR: An unhandled error occured. #101")
-            
+
             """
             if(int(i) == int(ceil((nooc00/2) ))):
-                    
+
                 print("LOG : DIVIDER IS CENTERED ")
                 self.output_lo1.setText(self.output_lo1.text()[(3+((intOfI-1)*4)):])
                 self.output_lo2.setText(" "+ spac*(len(branchConv)) +branchConv)
-            
+
             elif(int(i) > int(ceil((nooc00/2) ))):
                 self.output_lo2.setText()
                 self.output_lo1.setText(spac*8*(int(i)-int(ceil((nooc00/2))))+"|")
@@ -624,16 +681,16 @@ class MyAppv(Ui_Dialog):
                 self.output_lo1.setText("|" + spac*(8*(int(ceil((nooc00/2)))-int(i))))
             """
         return ans
-    
-    
+
+
     def carboxylic(self, noofc, bond00):
         if not bond00:
             bond00 = [1]
             ans = self.alkane(noofc)
         else:
-             
+
             ans = self.alkene(noofc, bond00, True)
-        
+
         spac = " "
         rndcnt = 1
         self.output_lo2_2.setText(len(ans)*spac)
@@ -644,7 +701,7 @@ class MyAppv(Ui_Dialog):
         nooc00 = noofc
         counter = int(bond00[0])
         print("LOG: nooc00", nooc00)
-        
+
         print(counter, '=', noofc)
         if((counter==1)or(counter==noofc)):
             if(noofc == 1):
@@ -658,7 +715,7 @@ class MyAppv(Ui_Dialog):
                 self.output_lo1_2.setText(len(ans)*spac)
                 self.output_hi2_2.setText(len(ans)*spac)
                 self.output_hi1_2.setText(len(ans)*spac)
-                
+
         elif((counter%2==0)and (1<counter<noofc)):
             print("LOG: using lo")
             self.output_lo2_2.setText(self.output_lo2_2.text()[:(4 * (counter - 1))] + \
@@ -674,14 +731,14 @@ class MyAppv(Ui_Dialog):
         else:
             ans ="ERROR: An unhandled error occured. #101"
             print(ans)
-        
+
             """
             if(int(i) == int(ceil((nooc00/2) ))):
-                    
+
                 print("LOG : DIVIDER IS CENTERED ")
                 self.output_lo1.setText(self.output_lo1.text()[(3+((intOfI-1)*4)):])
                 self.output_lo2.setText(" "+ spac*(len(branchConv)) +branchConv)
-            
+
             elif(int(i) > int(ceil((nooc00/2) ))):
                 self.output_lo2.setText()
                 self.output_lo1.setText(spac*8*(int(i)-int(ceil((nooc00/2))))+"|")
@@ -690,16 +747,16 @@ class MyAppv(Ui_Dialog):
                 self.output_lo1.setText("|" + spac*(8*(int(ceil((nooc00/2)))-int(i))))
             """
         return ans
-    
-    
+
+
     def alcohol(self, noofc, bond00):
         if not bond00:
             bond00 = [1]
             ans = self.alkane(noofc)
         else:
-             
+
             ans = self.alkene(noofc, bond00, True)
-        
+
         spac = " "
         rndcnt = 1
         self.output_lo2_2.setText(len(ans)*spac)
@@ -710,7 +767,7 @@ class MyAppv(Ui_Dialog):
         nooc00 = noofc
         counter = int(bond00[0])
         print("LOG: nooc00", nooc00)
-        
+
         print(counter, '=', noofc)
         if((counter==1)or(counter==noofc)):
             if(noofc == 1):
@@ -724,7 +781,7 @@ class MyAppv(Ui_Dialog):
                 self.output_lo1_2.setText(len(ans)*spac)
                 self.output_hi2_2.setText(len(ans)*spac)
                 self.output_hi1_2.setText(len(ans)*spac)
-                
+
         elif((counter%2==0)and (1<counter<noofc)):
             print("LOG: using lo")
             self.output_lo2_2.setText(self.output_lo2_2.text()[:(4 * (counter - 1))] + \
@@ -740,14 +797,14 @@ class MyAppv(Ui_Dialog):
         else:
             ans ="ERROR: An unhandled error occured. #101"
             print(ans)
-        
+
             """
             if(int(i) == int(ceil((nooc00/2) ))):
-                    
+
                 print("LOG : DIVIDER IS CENTERED ")
                 self.output_lo1.setText(self.output_lo1.text()[(3+((intOfI-1)*4)):])
                 self.output_lo2.setText(" "+ spac*(len(branchConv)) +branchConv)
-            
+
             elif(int(i) > int(ceil((nooc00/2) ))):
                 self.output_lo2.setText()
                 self.output_lo1.setText(spac*8*(int(i)-int(ceil((nooc00/2))))+"|")
@@ -756,8 +813,8 @@ class MyAppv(Ui_Dialog):
                 self.output_lo1.setText("|" + spac*(8*(int(ceil((nooc00/2)))-int(i))))
             """
         return ans
-    
-    
+
+
     def alkene(self, noofc, bond00, normallity=False):
         if(bond00 == []):
             bond00 =[2]
@@ -776,20 +833,20 @@ class MyAppv(Ui_Dialog):
                 k = 1
                 answer = BOND[0] + BOND[1] * (noofc - 2) + TERMINAL[0]
                 for i in bond00:
-                        
+
                     counter = int(i)
                     print(counter, '=', noofc)
                     if((counter==noofc)or(counter==1)):
                         answer = "Error! Double bonds cannot be placed at terminal ends"
                         break
-                    
+
                     answer = answer[:(4 * (counter - 1))] + \
                                     BOND[2] + answer[(4 * (counter)):]
 
                     answer = answer.replace("=CH₂-", "=CH₁-")
                     answer = answer.replace("=CH₁=", "= C =")
                     print(answer)
-                
+
                 self.placer.setMinimum(2)
                 self.placer.setMaximum(noofc - 2)
                 self.placer.setEnabled(True)
@@ -799,19 +856,19 @@ class MyAppv(Ui_Dialog):
             answer = BOND[0] + BOND[1] * (noofc - 2) + TERMINAL[0]
             print("LOG: Non-alkanised answer 001 :", answer)
             for i in bond00:
-                        
+
                 counter = int(i)
                 print(counter, '=', noofc)
-                
-                
+
+
                 answer = answer[:(4 * (counter - 1))] + \
                                 BOND[2] + answer[(4 * (counter)):]
                 answer = answer.replace("=CH₂-", "=CH₁-")
                 answer = answer.replace("=CH₁=", "= C =")
                 answer = answer.replace("=", "-")
-                
+
                 print("LOG: Non-alkanised alkene answer", answer)
-            
+
             self.placer.setMinimum(2)
             self.placer.setMaximum(noofc - 2)
             self.placer.setEnabled(True)
@@ -847,7 +904,11 @@ class MyAppv(Ui_Dialog):
                         answer = answer.replace("=CH₁=", "= C =")
                         print(answer)
                         counter3 = counter
-            """
+          """
+        self.output_hi1_2.setText(" "*len(answer))
+        self.output_hi2_2.setText(" "*len(answer))
+        self.output_lo1_2.setText(" "*len(answer))
+        self.output_lo2_2.setText(" "*len(answer))
         return answer
 
 
@@ -938,7 +999,7 @@ class MyAppv(Ui_Dialog):
                         counter3 = counter
             """
         return answer
-    
+
     def cyclic(self, noofc,):
         print("LOG: Entered chkbond function with Cyclic entry")
         print("LOG: noofc = ", noofc)
@@ -955,17 +1016,17 @@ class MyAppv(Ui_Dialog):
                 self.output_lo2_2.setText(holder) # text box 4
                 res = TERMINAL[1] + " "*(len(holder)) + TERMINAL[1]
                 return res
-                
+
             else:
                 msg = "ERROR: An unhandled error occured"
                 print(msg)
                 return msg
         else:
-            
+
             print("LOG: Number of carbons are odd")
             if(noofc ==3):
                 print("LOG: Detected cyclopropane")
-            
+
                 self.output_hi2.setText(TERMINAL[1])
                 self.output_hi1.setText("/   \\")
                 res =  TERMINAL[1]+"-"+TERMINAL[1]
@@ -983,7 +1044,7 @@ class MyAppv(Ui_Dialog):
                 return res
 
 
-    def chkBond(self, bonds, noofc, bond00, numbranch=[], branch=[], benzylBool=False):
+    def chkBond(self, bonds, noofc, bond00, numbranch=[], branch=[], benzylBool=False, haloIndexConv=[], haloGroupConv=[]):
         branchesList = ["CH₃ ", "CH₂-CH₃ ", "CH₂-CH₂-CH₃ ", "CH₂-CH₂-CH₂-CH₃ ", "CH₂-CH₂-CH₂-CH₂-CH₃ "]
         counterX = 1
         if(benzylBool):
@@ -996,12 +1057,12 @@ class MyAppv(Ui_Dialog):
             self.output_lo1_2.setText("\\"+" "*len(holder)+"/") # text box 3
             self.output_lo2_2.setText(holder.replace("-", "=")) # text box 4
             return res
-        
+
         if (bonds == 1):
             res = self.alkane(noofc)
         elif (bonds == 2):
             res = self.alkene(noofc, bond00)
-            
+
         elif (bonds == 3):
             res = self.alkyne(noofc, bond00)
         elif (bonds ==4 ):
@@ -1016,14 +1077,160 @@ class MyAppv(Ui_Dialog):
         elif bonds == 8:
             print("LOG: Alcohol ++++++++++++++")
             res = self.alcohol(noofc, bond00)
-        
+
         else:
             res = "Bye Bye!"
             print(res)
+
+
+        # halogen -------------------------
+
+
+
+
+        for halogenzip in zip(haloIndexConv, haloGroupConv):
+            if halogenzip[1]=="bromo":
+                plugHalogen = " Br "
+            elif halogenzip[1]=="chloro":
+                plugHalogen = " Cl "
+            elif halogenzip[1]=="iodo":
+                plugHalogen = " I  "
+            elif halogenzip[1]=="fluoro":
+                plugHalogen = " F  "
+            else:
+                plugHalogen = " X  "
+
+            if not bond00:
+                bond00 = [1]
+
+            # pre decalring variable to prevent UnboundLocalError
+            useHi = False
+            useLo = False
+            print("LOG: haloIndexConv =", halogenzip[0])
+            counter_halo = int(halogenzip[0])
+            spac = " "
+            rndcnt = 1
+            l1occ, l2occ, h1occ, h2occ = False, False, False,False
+
+            for m in self.output_lo2_2.text():
+                if m.isalpha():
+                    l2occ = True
+            for m in self.output_lo1_2.text():
+                if m.isalpha():
+                    l1occ = True
+            for m in self.output_hi2_2.text():
+                if m.isalpha():
+                    h2occ = True
+            for m in self.output_hi1_2.text():
+                if m.isalpha():
+                    h1occ = True
+
+            print("LOG: 88", self.output_lo2_2.text())
+            print("LOG: self.output_lo2_2.text().isspace() ", self.output_lo2_2.text().isspace(), l2occ)
+            print("LOG:  self.output_lo1_2.text().isspace()",  self.output_lo1_2.text().isspace(), l1occ)
+            print("LOG: self.output_hi2_2.text().isspace()", self.output_hi2_2.text().isspace(), h2occ)
+            print("LOG: self.output_hi1_2.text().isspace()", self.output_hi1_2.text().isspace(), h1occ)
+            if not l1occ and not l2occ:
+                self.output_lo2_2.setText(len(res)*spac)
+                self.output_lo1_2.setText(len(res)*spac)
+                print("LOG: output lo spaced")
+                useHi = False
+                useLo = True
+            else:
+                if not h1occ and not h2occ:
+                    self.output_hi2_2.setText(len(res)*spac)
+                    self.output_hi1_2.setText(len(res)*spac)
+                    print("LOG: output hi spaced")
+                    useHi = True
+                    useLo = False
+                else:
+                    if h1occ and l1occ and h2occ and l2occ:
+                        print("LOG: needed area is '", self.output_lo2_2.text()[(halogenzip[0])*4:(halogenzip[0]+1)*4], "'")
+                        if(self.output_lo2_2.text()[(halogenzip[0])*4:(halogenzip[0]+1)*4]).isspace():
+                            useLo = True
+                        elif(self.output_hi2_2.text()[(halogenzip[0])*4:(halogenzip[0]+1)*4]).isspace():
+                            useHi = True
+                        else:
+                            print("ERROR: A very very very unique situation has occured. Kindly report it to @srevinsaju on https://github.com/srevinsaju/carbonic/issues")
+
+
+            print("WARNING: for Halogen - functional group is added per structure")
+            nooc00 = noofc
+
+            print("LOG: nooc00", nooc00)
+
+            print("LOG: #104", counter_halo, '=', noofc)
+            print("LOG: #105 res", res)
+            # -----------------------
+            if(counter_halo==1):
+                theAlterer_halo = res[:3]
+                branchPosH = 3
+                print("LOG: 1")
+
+            elif counter_halo == noofc:
+                # theAlterer_halo = res[-3:]
+                branchPosH = halogenzip[0]*4
+                theAlterer_halo = res[(branchPosH-4):branchPosH]
+                print("LOG: 2")
+            else:
+                #theAlterer_halo = res[3+((noofc-1)*4):7+((noofc-1)*4)]
+                branchPosH = halogenzip[0]*4
+                theAlterer_halo = res[(branchPosH-4):branchPosH]
+                print("LOG: 3")
+            print("LOG: theAlterer_halo", theAlterer_halo)
+            if theAlterer_halo[2]=="₂":
+                tmpHolderH = "₁"
+            elif theAlterer_halo[2]=="₃":
+                tmpHolderH = "₂"
+            elif theAlterer_halo[2]=="₁":
+                tmpHolderH = "₀"
+            elif theAlterer_halo[2]=="₀":
+                msg = "ERROR: Carbon valency of 4 is completely utilized."
+                print(msg)
+                res = msg
+                return res
+            else:
+                msg = "ERROR: An unhandled error occured. Sorry. Report immediately to github.com/srevinsaju/carbonic/issues to refine this error"
+                print(msg)
+                res = msg
+                return res
+            # theAlterer = theAlterer[:2]+str(int(theAlterer[2])-1)+theAlterer[3:]
+
+            theAlterer_halo = theAlterer_halo[:2]+tmpHolderH+theAlterer_halo[3:]
+            theAlterer_halo  = theAlterer_halo.replace("CH₀"," C ")
+            print("LOG: 199++")
+            print("LOG: theAlterer_halo 199++", theAlterer_halo)
+            print("LOG: res[:(halogenzip[0]-4)]", res[:(halogenzip[0]-4)])
+            print("LOG: res[halogenzip[0]:]", res[halogenzip[0]:])
+            print("LOG: halogenzip[0]", halogenzip[0], type(halogenzip[0]))
+            # res = res[:(halogenzip[0]-4)]+theAlterer_halo+res[halogenzip[0]:]
+            if branchPosH == 3:
+                res = res[:(branchPosH-3)]+theAlterer_halo+res[branchPosH:]
+            else:
+                res = res[:(branchPosH-4)]+theAlterer_halo+res[branchPosH:]
+
+            # ---------------------
+            if(useLo and (1<=counter_halo<=noofc)):
+                print("LOG: using lo")
+                self.output_lo2_2.setText(self.output_lo2_2.text()[:(4 * (counter_halo - 1))] + \
+                                plugHalogen + self.output_lo2_2.text()[(4 * (counter_halo)):])
+                self.output_lo1_2.setText(self.output_lo1_2.text()[:(4 * (counter_halo - 1))] + \
+                    " ╵  " + self.output_lo1_2.text()[(4 * (counter_halo)):])
+            elif(useHi and (1<=counter_halo<=noofc)):
+                print("LOG: using hi")
+                self.output_hi2_2.setText(self.output_hi2_2.text()[:(4 * (counter_halo - 1))] + \
+                            plugHalogen + self.output_hi2_2.text()[(4 * (counter_halo)):])
+                self.output_hi1_2.setText(self.output_hi1_2.text()[:(4 * (counter_halo - 1))] + \
+                    " ╷  " + self.output_hi1_2.text()[(4 * (counter_halo)):])
+            else:
+                ans ="ERROR: An unhandled error occured. #101"
+                print(ans)
+
+
         counterX = 1
         for i in zip(numbranch, branch):
             nooc00 = res.count("C")
-            
+
             print("LOG:", branch, "+ RAW")
             branch00 = branch[counterX-1]
             print("LOG:", branch00, "+ COOKED")
@@ -1059,11 +1266,11 @@ class MyAppv(Ui_Dialog):
                 print(msg)
                 res = msg
                 return res
-            
+
             elif(nooh[0]=="H"):
                 print("LOG: Detected H",nooh[1])
                 if(nooh[1]):
-                    
+
                     print("LOG: Detected Numeric value for H")
                     if theAlterer[2]=="₂":
                         tmpHolder = "₁"
@@ -1089,8 +1296,8 @@ class MyAppv(Ui_Dialog):
                     res = msg
                     return res
             res = res[:(branchPos-4)]+theAlterer+res[branchPos:]
-            
-        
+
+
             print("LOG: i", i)
             lo1Hold = self.output_lo1.text()
             hi1Hold = self.output_hi1.text()
@@ -1110,19 +1317,19 @@ class MyAppv(Ui_Dialog):
                 print("WARNING: Lets wait for it")
                 if(counterX%2==0):
                     print("LOG: neither1")
-                    
+
                     self.output_lo1.setText(self.output_lo1.text()[:(4 * (i[0] - 1))] + \
                             " \  " + self.output_lo1.text()[(4 * (i[0])):])
                     self.output_lo2.setText(self.output_lo2.text()[:(4 * (i[0] - 1))] + \
                             "  \ " + self.output_lo2.text()[(4 * (i[0])):])
                     self.output_lo3.setText(self.output_lo3.text()[:(4 * (i[0] - 1))] + \
                         (" "*ceil(len(branchConv)/2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
-                
-                    
+
+
                     pass
                 elif(counterX%2==1):
                     print("LOG: neither2")
-                   
+
                     self.output_hi2.setText(self.output_hi2.text()[:(4 * (i[0] - 1))] + \
                             "  / " + self.output_hi2.text()[(4 * (i[0])):])
                     self.output_hi1.setText(self.output_hi1.text()[:(4 * (i[0] - 1))] + \
@@ -1137,15 +1344,15 @@ class MyAppv(Ui_Dialog):
                 self.output_lo1.setText(" "*len(res))
                 self.output_lo2.setText(" "*len(res))
                 self.output_lo3.setText(" "*len(res))
-                
+
                 self.output_lo1.setText(self.output_lo1.text()[:(4 * (i[0] - 1))] + \
                         " \  " + self.output_lo1.text()[(4 * (i[0])):])
                 self.output_lo2.setText(self.output_lo2.text()[:(4 * (i[0] - 1))] + \
                         "  \ " + self.output_lo2.text()[(4 * (i[0])):])
                 self.output_lo3.setText(self.output_lo3.text()[:(4 * (i[0] - 1))] + " " +\
                         (" "*(len(branchConv)//2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
-                
-                
+
+
                 pass
             elif lo_contains:
                 print("LOG: lo_contains")
@@ -1171,8 +1378,8 @@ class MyAppv(Ui_Dialog):
                             "  \ " + self.output_lo2.text()[(4 * (i[0])):])
                     self.output_lo3.setText(self.output_lo3.text()[:(4 * (i[0] - 1))] + \
                         (" "*ceil(len(branchConv)/2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
-                
-                    
+
+
                     pass
                 elif(counterX%2==1):
                     print("LOG: neither2")
@@ -1186,31 +1393,31 @@ class MyAppv(Ui_Dialog):
                     self.output_hi3.setText(self.output_hi3.text()[:(4 * (i[0] - 1))] + "  " +\
                         (" "*ceil(len(branchConv)/2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
                     pass
-                
+
                 pass
             counterX+=1
             """
             if(i[0] == int(ceil((nooc00/2) ))):
-                
+
                 print("LOG : DIVIDER IS CENTERED ")
                 self.output_lo1.setText("\\")
                 self.output_lo2.setText(" "+ spac*(len(branchConv)) +branchConv)
-            
+
             elif(i[0] > int(ceil((nooc00/2) ))):
                 self.output_lo2.setText(spac + spac*(len(branchConv)) +spac*(8*(i[0]-int(ceil((nooc00/2)))))+branchConv)
                 self.output_lo1.setText(spac*8*(i[0]-int(ceil((nooc00/2))))+"\\")
             elif(i[0] < int(ceil((nooc00/2) ))):
                 self.output_lo2.setText(spac + spac*(len(branchConv)) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-i[0])))
                 self.output_lo1.setText("\\" + spac*(8*(int(ceil((nooc00/2)))-i[0])))
-        
-            
+
+
         elif(counterX%2==0):
             if(i[0] == int(ceil((nooc00/2) ))):
-                
+
                 print("LOG : DIVIDER IS CENTERED ")
                 self.output_hi1.setText("/")
                 self.output_hi2.setText(" "+ spac*(len(branchConv)) +branchConv)
-            
+
             elif(i[0] > int(ceil((nooc00/2) ))):
                 self.output_hi2.setText(spac + spac*(len(branchConv)) +spac*(8*(i[0]-int(ceil((nooc00/2)))))+branchConv)
                 self.output_hi1.setText(spac*8*(i[0]-int(ceil((nooc00/2))))+"/")
@@ -1219,16 +1426,16 @@ class MyAppv(Ui_Dialog):
                 self.output_hi1.setText("/" + spac*(8*(int(ceil((nooc00/2)))-i[0])))self.output_hi2.setText(spac + spac*(len(branchConv)) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-i[0])))
                 self.output_hi1.setText("/" + spac*(8*(int(ceil((nooc00/2)))-i[0])))
 
-        
+
         """
-        
+
         return res
 
 
 
 if __name__ == "__main__":
     appo = QtWidgets.QApplication(sys.argv)
-    
+
     # Create and display the splash screen
     splash_pix = QPixmap(':res/carbonic-branding.png')
     splash = QtWidgets.QSplashScreen(splash_pix)
@@ -1240,7 +1447,7 @@ if __name__ == "__main__":
     time.sleep(2)
     # app.aboutToQuit().connect(app.deleteLater)
     window = QtWidgets.QMainWindow()
-    
+
     progg = MyAppv(window)
     window.show(); splash.hide()
     sys.exit(appo.exec_())

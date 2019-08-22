@@ -1,4 +1,5 @@
-<image src="res/logo.png" align="middle" style="display: block; margin-left: auto; margin-right: auto" width=50%></image>
+<image src="res/logo.png" align="middle" style="display: block; margin-left: auto; margin-right: auto" width=25%></image>
+<p>
 [![Snap Status](https://build.snapcraft.io/badge/srevinsaju/carbonic.svg)](https://build.snapcraft.io/user/srevinsaju/carbonic)
 #  carbonic
 <p>

@@ -2,8 +2,6 @@
 """
 carbonic on github by @srevinsaju
 
-THIS IS MAIN MODULE FOR GUI INTEGRATION PORT.
-
 ALL CODE IS LICENSED UNDER GNU-GPL LICENSE. READ LICENSE FOR MORE INFORMATION
 
 # Redistribution and use in source and binary forms, with or without
@@ -35,8 +33,29 @@ import os
 from math import ceil
 import sys
 import time
+import collections
+
+class carbox:
+	def __init__(self, bondorder=1, noofc=1, bondpos_chkBond=[2], numbranch=[], branch=[], benzylBool=False, haloIndexConv=[], haloGroupConv=[], **kwargs):
+		self.bondOrder=bondorder
+		self.noofc=noofc
+		self.bondPos=bondpos_chkBond
+		self.numbranch=numbranch
+		self.branch = branch
+		self.benzyl = benzylBool
+		self.haloIndexConv = haloIndexConv
+		self.haloBranchConv = haloGroupConv
 
 
+def displax(resource):
+	if type(resource) is str:
+		print(resource)
+	elif type(resource) is list:
+		if len(resource) == 1:
+			print(resource[0])
+		else:
+			print(resource[6],resource[5],resource[4],resource[0], resource[1], resource[2], resource[3],sep="\n")
+		
 
 # reusable data
 TERMINAL = ["CH₃", "CH₂"]
@@ -50,10 +69,10 @@ NNNNRESULT = ""
 
 
 
-def convertor(inp):
+def convertor(raw_iupac):
 	func = None
-	inp = inp.strip()
-	inp = inp.lower()
+	raw_iupac = raw_iupac.strip()
+	raw_iupac = raw_iupac.lower()
 	cyclic = False
 	benzeneChildBool = False
 	addOnBranches = []
@@ -61,21 +80,21 @@ def convertor(inp):
 	listOfAdditionalStuff = ["methyl", "ethyl", "propyl", "butyl", "pentyl", "hexyl"]
 	BenzeneChild = ["benz", "naphthal", "anthrac", "chrys", "pyrene", "corannulene", "coronene", "hexahelic"]
 	count = 1
-	print(inp.find("["), " is INDEX")
-	if((inp.find("["))!=-1):
+	print(raw_iupac.find("["), " is INDEX")
+	if((raw_iupac.find("["))!=-1):
 
 	    for i in listOfAdditionalStuff:
-	        if(inp.find(i)==-1):
+	        if(raw_iupac.find(i)==-1):
 	            print("LOG: passed", i)
 	            count+=1
 	            continue
 	            # continue : removed because repeated methyl or ethyl groups are not considered
 	        else:
-	            while inp.find(i)!=1:
+	            while raw_iupac.find(i)!=1:
 	                print("found ", i)
-	                indic = inp.find(i)
+	                indic = raw_iupac.find(i)
 	                try:
-	                    addOnNum = int(inp[inp.find("[")+1:indic-1])
+	                    addOnNum = int(raw_iupac[raw_iupac.find("[")+1:indic-1])
 	                except ValueError:
 
 	                    print("WARNING: Getting out of loop")
@@ -84,19 +103,19 @@ def convertor(inp):
 	                print("LOG : AddOnNum is ", addOnNum)
 	                addOnBranchesNum.append(addOnNum)
 	                addOnBranches.append(i)
-	                inp=inp[(indic+len(i)+1):]
+	                raw_iupac=raw_iupac[(indic+len(i)+1):]
 
 	                count+=1
-	                print("LOG: inp:", inp)
+	                print("LOG: raw_iupac:", raw_iupac)
 
 
 	else:
 	    print("HOHO")
-	print(inp)
+	print(raw_iupac)
 	print("LOG: addOnBranchesNum = ", addOnBranchesNum)
 	print("LOG: addOnBranches = ", addOnBranches)
 	# for use in emergency :)
-	tmpinp = inp
+	tmpinp = raw_iupac
 	# initialize bondpos_chkBond value to prevent NameError
 	bondpos_chkBond = []
 
@@ -106,42 +125,42 @@ def convertor(inp):
 
 	halogens = ["bromo", "fluoro", "iodo", "chloro"]
 	for halogen in halogens:
-	    if inp.find(halogen)>-1:
-	        while inp.find(halogen)>-1:
+	    if raw_iupac.find(halogen)>-1:
+	        while raw_iupac.find(halogen)>-1:
 	            print("LOG: detected halogen", halogen)
-	            haloIndex = inp.find(halogen)
-	            if inp[haloIndex-1:haloIndex]=="-":
+	            haloIndex = raw_iupac.find(halogen)
+	            if raw_iupac[haloIndex-1:haloIndex]=="-":
 	                print("LOG: Found numeric value")
-	                print("LOG: inp @ halo", inp)
-	                if(inp[0]==","):
+	                print("LOG: raw_iupac @ halo", raw_iupac)
+	                if(raw_iupac[0]==","):
 	                    print("LOG: comma pased in halo section")
-	                    inp=inp[1:]
-	                    print("LOG: inp after comma @ halo", inp)
+	                    raw_iupac=raw_iupac[1:]
+	                    print("LOG: raw_iupac after comma @ halo", raw_iupac)
 	                    continue
 
 	                else:
-	                    print("LOG: No comma in ", inp)
+	                    print("LOG: No comma in ", raw_iupac)
 	                try:
-	                    print("LOG: inp[:haloIndex-1] is ", inp[:haloIndex-1])
-	                    haloIndexConv.append(int(inp[:haloIndex-1]))
+	                    print("LOG: raw_iupac[:haloIndex-1] is ", raw_iupac[:haloIndex-1])
+	                    haloIndexConv.append(int(raw_iupac[:haloIndex-1]))
 	                    haloGroupConv.append(halogen)
-	                    inp = inp[haloIndex+len(halogen):]
-	                    print("LOG: inp is", inp)
+	                    raw_iupac = raw_iupac[haloIndex+len(halogen):]
+	                    print("LOG: raw_iupac is", raw_iupac)
 	                except ValueError:
 	                    print("LOG: trying once again")
 	                    try:
-	                        print("LOG: inp[:haloIndex-2] is ", inp[:haloIndex-2])
-	                        haloIndexConv.append(int(inp[:haloIndex-2]))
+	                        print("LOG: raw_iupac[:haloIndex-2] is ", raw_iupac[:haloIndex-2])
+	                        haloIndexConv.append(int(raw_iupac[:haloIndex-2]))
 	                        haloGroupConv.append(halogen)
-	                        inp = inp[haloIndex-1+len(halogen):]
-	                        print("LOG: inp is", inp)
+	                        raw_iupac = raw_iupac[haloIndex-1+len(halogen):]
+	                        print("LOG: raw_iupac is", raw_iupac)
 	                    except ValueError:
 	                        try:
-	                            print("LOG: inp[:haloIndex-3] is ", inp[:haloIndex-3])
-	                            haloIndexConv.append(int(inp[:haloIndex-3]))
+	                            print("LOG: raw_iupac[:haloIndex-3] is ", raw_iupac[:haloIndex-3])
+	                            haloIndexConv.append(int(raw_iupac[:haloIndex-3]))
 	                            haloGroupConv.append(halogen)
-	                            inp = inp[haloIndex-2+len(halogen):]
-	                            print("LOG: inp is", inp)
+	                            raw_iupac = raw_iupac[haloIndex-2+len(halogen):]
+	                            print("LOG: raw_iupac is", raw_iupac)
 	                        except ValueError:
 	                            print("LOG: Really sorry about that")
 	                            break
@@ -149,8 +168,8 @@ def convertor(inp):
 	                print("LOG: No halo value found ")
 	                haloIndexConv.append(1)
 	                haloGroupConv.append(halogen)
-	                inp = inp[haloIndex+len(halogen):]
-	                print("LOG: inp is", inp)
+	                raw_iupac = raw_iupac[haloIndex+len(halogen):]
+	                print("LOG: raw_iupac is", raw_iupac)
 	                break
 
 	    else:
@@ -159,25 +178,25 @@ def convertor(inp):
 	print("LOG: haloIndexConv:", haloIndexConv)
 	# read the #- value of the IUPAC name
 	for i in tmpinp:
-	    if(inp[0].isalpha()):
+	    if(raw_iupac[0].isalpha()):
 	        print("LOG: isAlpha")
 	        break
 	    try:
-	        if(inp[0].isnumeric):
-	            bondpos_chkBond.append(inp[0])
-	            inp = inp[1:]
+	        if(raw_iupac[0].isnumeric):
+	            bondpos_chkBond.append(raw_iupac[0])
+	            raw_iupac = raw_iupac[1:]
 	        else:
 	            print("LOG: No",i)
 	    except IndexError:
 	        print("No index, passing")
 	    try:
-	        if(inp[0]==","):
-	            inp = inp[1:]
+	        if(raw_iupac[0]==","):
+	            raw_iupac = raw_iupac[1:]
 	    except IndexError:
 	        print("No Index, passing")
 	    try:
-	        if(inp[0] == "-"):
-	            inp = inp[1:]
+	        if(raw_iupac[0] == "-"):
+	            raw_iupac = raw_iupac[1:]
 	            break
 	        else:
 	            print("NONO", i)
@@ -186,49 +205,49 @@ def convertor(inp):
 	        print("No Index, passing")
 
 	# Check the carbon compound is alkane, alkene or alkyne
-	if(inp.endswith("ane")):
-	    if(inp.startswith("cyclo")):
+	if(raw_iupac.endswith("ane")):
+	    if(raw_iupac.startswith("cyclo")):
 	        print("LOG: Detected Cyclic Carbon Compounds")
 	        bond_int = 4
-	        inp = inp[5:]
-	        print("LOG: Logging Cyclic inp=", inp)
+	        raw_iupac = raw_iupac[5:]
+	        print("LOG: Logging Cyclic raw_iupac=", raw_iupac)
 	        cyclic = True
 	    else:
 	        bond_int = 1
 	        print("LOG: alkane")
-	    restOfInp = inp.partition("ane")
-	elif(inp.endswith("ene")):
+	    restOfInp = raw_iupac.partition("ane")
+	elif(raw_iupac.endswith("ene")):
 	    print("alken")
 
 	    for i in BenzeneChild:
-	        if (inp.startswith(str(i))):
+	        if (raw_iupac.startswith(str(i))):
 	            childOfBenzeneType = i
 	            benzeneChildBool = True
 	            break
 
 	    bond_int = 2
-	    restOfInp = inp.partition("ene")
+	    restOfInp = raw_iupac.partition("ene")
 
-	elif(inp.endswith("yne")):
+	elif(raw_iupac.endswith("yne")):
 	    bond_int = 3
 	    print("LOG: alkyne")
-	    restOfInp = inp.partition("yne")
-	elif(inp.endswith("one")):
+	    restOfInp = raw_iupac.partition("yne")
+	elif(raw_iupac.endswith("one")):
 	    bond_int = 5
 	    print("LOG: Detected Ketone")
-	    restOfInp = inp.partition("one")
-	elif(inp.endswith("oic acid")):
+	    restOfInp = raw_iupac.partition("one")
+	elif(raw_iupac.endswith("oic acid")):
 	    bond_int = 7
 	    print("LOG: Detected Carboxylic Acid")
-	    restOfInp = inp.partition("oic acid")
-	elif(inp.endswith("ol")):
+	    restOfInp = raw_iupac.partition("oic acid")
+	elif(raw_iupac.endswith("ol")):
 	    bond_int = 8
 	    print("LOG: Detected Alcohol")
-	    restOfInp = inp.partition("ol")
-	elif(inp.endswith("al")):
+	    restOfInp = raw_iupac.partition("ol")
+	elif(raw_iupac.endswith("al")):
 	    bond_int = 6
 	    print("LOG: Detected Aldehyde")
-	    restOfInp = inp.partition("al")
+	    restOfInp = raw_iupac.partition("al")
 
 	else:
 	    bond_int = 0
@@ -339,7 +358,9 @@ def convertor(inp):
 	print(restOfInp)
 	print(noofc0)
 
-	return noofc0, bond_int, bondpos_chkBond, addOnBranchesNum, addOnBranches, benzeneChildBool, haloIndexConv, haloGroupConv
+	# END OF CONVERTOR FUNCTION
+	
+	return carbox(bond_int, noofc0, bondpos_chkBond, addOnBranchesNum, addOnBranches, benzeneChildBool, haloIndexConv, haloGroupConv)
 
 def addfunctionalgrp(noofc):
 	functionalgrp = input(
@@ -358,7 +379,7 @@ def addfunctionalgrp(noofc):
 	            answer = answer[:-5]+tempterminal
 
 
-	    restxt = self.chkBond(bondorder, noofc, bondpos_chkBond, numbranch, branch, benzylBool, haloIndexConv, haloGroupConv)
+	    restxt = chkBond(carbox(bondorder, noofc, bondpos_chkBond, numbranch, branch, benzylBool, haloIndexConv, haloGroupConv))
 
 	    leng = len(restxt); print(restext)
    
@@ -801,52 +822,9 @@ def alkyne(noofc=2, bondpos_chkBond=[2]):
 	            answer = answer[:(4 * (bondpos - 1) + 3)] + \
 	                "≡ C -" + answer[(4 * (bondpos - 1) + 8):]
 
-
-	    counter3 = 0
-
-	    """
-	    while (k == 1):
-
-	        bondpos = int(input(
-	            "Enter the postion of the bond (from least to greatest or left to right) --> "))
-
-	        if (bondpos == 0):
-	            k = 0
-	        elif (bondpos == 1):
-	            print("Double bondorder on terminal carbon atoms are invalid")
-	            k = 0
-
-	        elif (bondpos == noofc):
-	            print("Double bondorder on terminal carbon atoms are invalid")
-	            k = 0
-	        elif (bondpos == noofc - 1):
-	            print("Double bondorder on terminal carbon atoms are invalid")
-	            k = 0
-
-	        else:
-
-	            if (counter3 > bondpos):
-	                print("Enter in ascending order")
-	                k = 0
-	            elif (bondpos == counter3 + 1):
-	                print("Valency of Carbon is 4")
-	                k = 0
-	            else:
-	                answer = answer[:(4 * (bondpos - 1))] + \
-	                    BOND[4] + answer[(4 * (bondpos)):]
-	                answer = answer.replace("≡CH₂-", "≡ C -")
-
-	                if (answer[(4 * (bondpos - 1) + 3):(4 * (bondpos - 1) + 8)] == "≡CH₂-"):
-	                    print("≡")
-	                    answer = answer[:(4 * (bondpos - 1) + 3)] + \
-	                        "≡ C -" + answer[(4 * (bondpos - 1) + 8):]
-
-	                print(answer)
-	                counter3 = bondpos
-	    """
 	return answer
 
-def cyclic(self, noofc,):
+def cyclic(noofc=3):
 	print("LOG: Entered chkbond function with Cyclic entry")
 	print("LOG: noofc = ", noofc)
 	# check if nmber of carbon is even or not
@@ -890,7 +868,18 @@ def cyclic(self, noofc,):
 	        return res
 
 
-def chkBond(bondorder, noofc, bondpos_chkBond=[2], numbranch=[], branch=[], benzylBool=False, haloIndexConv=[], haloGroupConv=[]):
+def chkBond(carbox_struct):
+	# retrieve data from carbox struvt
+	bondorder = carbox_struct.bondOrder
+	noofc=carbox_struct.noofc
+	bondpos_chkBond= carbox_struct.bondPos
+	numbranch=carbox_struct.numbranch
+	branch=carbox_struct.branch
+	benzylBool=carbox_struct.benzyl
+	haloIndexConv=carbox_struct.haloIndexConv
+	haloGroupConv=carbox_struct.haloBranchConv
+	lo_contains = False
+	hi_contains = False 
 	branchesList = ["CH₃ ", "CH₂-CH₃ ", "CH₂-CH₂-CH₃ ", "CH₂-CH₂-CH₂-CH₃ ", "CH₂-CH₂-CH₂-CH₂-CH₃ "]
 	counterX = 1
 	if(benzylBool):
@@ -997,9 +986,9 @@ def chkBond(bondorder, noofc, bondpos_chkBond=[2], numbranch=[], branch=[], benz
 	            if h1occ and l1occ and h2occ and l2occ:
 	            	# FIXME 
 	                # print("LOG: needed area is '", self.output_lo2_2.text()[(halogenzip[0])*4:(halogenzip[0]+1)*4], "'")
-	                if(self.output_lo2_2.text()[(halogenzip[0])*4:(halogenzip[0]+1)*4]).isspace():
+	                if(lo2Hold[(halogenzip[0])*4:(halogenzip[0]+1)*4].isspace():
 	                    useLo = True
-	                elif(self.output_hi2_2.text()[(halogenzip[0])*4:(halogenzip[0]+1)*4]).isspace():
+	                elif(hi2Hold[(halogenzip[0])*4:(halogenzip[0]+1)*4]).isspace():
 	                    useHi = True
 	                else:
 	                    print("ERROR: A very very very unique situation has occured. Kindly report it to @srevinsaju on https://github.com/srevinsaju/carbonic/issues")
@@ -1064,10 +1053,10 @@ def chkBond(bondorder, noofc, bondpos_chkBond=[2], numbranch=[], branch=[], benz
 	    if(useLo and (1<=counter_halo<=noofc)):
 	        print("LOG: using lo")
 	        # FIXME
-	        #self.output_lo2_2.setText(self.output_lo2_2.text()[:(4 * (counter_halo - 1))] + \
-	        #                plugHalogen + self.output_lo2_2.text()[(4 * (counter_halo)):])
-	        #self.output_lo1_2.setText(self.output_lo1_2.text()[:(4 * (counter_halo - 1))] + \
-	        #    " ╵  " + self.output_lo1_2.text()[(4 * (counter_halo)):])
+	        lo2Hold = lo2Hold[:(4 * (counter_halo - 1))] + \
+	                        plugHalogen + lo2Hold[(4 * (counter_halo)):]
+	        lo1Hold = lo1Hold[:(4 * (counter_halo - 1))] + \
+	            " ╵  " + lo1Hold[(4 * (counter_halo)):]
 	    elif(useHi and (1<=counter_halo<=noofc)):
 	        print("LOG: using hi")
 	        #self.output_hi2_2.setText(self.output_hi2_2.text()[:(4 * (counter_halo - 1))] + \
@@ -1147,6 +1136,8 @@ def chkBond(bondorder, noofc, bondpos_chkBond=[2], numbranch=[], branch=[], benz
 	            print(msg)
 	            res = msg
 	            return res
+	            
+       
 	    res = res[:(branchPos-4)]+theAlterer+res[branchPos:]
 
 
@@ -1154,15 +1145,27 @@ def chkBond(bondorder, noofc, bondpos_chkBond=[2], numbranch=[], branch=[], benz
 	    # FIXME
 	    #lo1Hold = self.output_lo1.text()
 	    #hi1Hold = self.output_hi1.text()
-	    lo_contains = False
-	    hi_contains = False
+	    try:
+	    	trier = lo1Hold
+	    except NameError:
+	    	lo1Hold = " "*len(res)
+	    	lo2Hold = " "*len(res)
+	    	lo3Hold = " "*len(res)
+	    try:
+	    	trier = hi1Hold
+	    except NameError:
+	    	hi1Hold = " "*len(res)
+	    	hi2Hold = " "*len(res)
+	    	hi3Hold = " "*len(res)
+
+
 	    for j in lo1Hold:
-	        if(j==" "):
+	        if(j.isspace()):
 	            continue
 	        else:
 	            lo_contains = True
 	    for k in hi1Hold:
-	        if(k==" "):
+	        if(k.isspace()):
 	            continue
 	        else:
 	            hi_contains = True
@@ -1171,14 +1174,15 @@ def chkBond(bondorder, noofc, bondpos_chkBond=[2], numbranch=[], branch=[], benz
 	        if(counterX%2==0):
 	            print("LOG: neither1")
 	            # FIXME
-	            """
-	            self.output_lo1.setText(self.output_lo1.text()[:(4 * (i[0] - 1))] + \
-	                    " \  " + self.output_lo1.text()[(4 * (i[0])):])
-	            self.output_lo2.setText(self.output_lo2.text()[:(4 * (i[0] - 1))] + \
-	                    "  \ " + self.output_lo2.text()[(4 * (i[0])):])
-	            self.output_lo3.setText(self.output_lo3.text()[:(4 * (i[0] - 1))] + \
-	                (" "*ceil(len(branchConv)/2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
-				"""
+	            
+	            lo1Hold = lo1Hold[:(4 * (i[0] - 1))] + \
+	                    " \  " + lo1Hold[(4 * (i[0])):]
+	                    
+	            lo2Hold = lo2Hold[:(4 * (i[0] - 1))] + \
+	                    "  \ " + lo2Hold[(4 * (i[0])):]
+	            lo3Hold = lo3Hold[:(4 * (i[0] - 1))] + \
+	                (" "*ceil(len(branchConv)/2))+branchConv + lo3Hold[(4 * (i[0])+(len(branchConv)-4)):]
+				
 
 	            pass
 	        elif(counterX%2==1):
@@ -1198,67 +1202,47 @@ def chkBond(bondorder, noofc, bondpos_chkBond=[2], numbranch=[], branch=[], benz
 	        print("LOG: branchCOnv:", branchConv)
 	        print("LOG: i[0]", i[0])
 	        # FIXME
-	        """
-	        self.output_lo1.setText(" "*len(res))
-	        self.output_lo2.setText(" "*len(res))
-	        self.output_lo3.setText(" "*len(res))
-
-	        self.output_lo1.setText(self.output_lo1.text()[:(4 * (i[0] - 1))] + \
-	                " \  " + self.output_lo1.text()[(4 * (i[0])):])
-	        self.output_lo2.setText(self.output_lo2.text()[:(4 * (i[0] - 1))] + \
-	                "  \ " + self.output_lo2.text()[(4 * (i[0])):])
-	        self.output_lo3.setText(self.output_lo3.text()[:(4 * (i[0] - 1))] + " " +\
-	                (" "*(len(branchConv)//2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
-			"""
-
+	        lo1Hold = " "*len(res)
+	        lo2Hold = " "*len(res)
+	        lo3Hold = " "*len(res)
+	        lo1Hold = lo1Hold[:(4 * (i[0] - 1))] + " \  " + lo1Hold[(4 * (i[0])):]
+	        lo2Hold = lo2Hold[:(4 * (i[0] - 1))] +   "  \ " + lo2Hold[(4 * (i[0])):]
+	        lo3Hold = lo3Hold[:(4 * (i[0] - 1))] + (" "*ceil(len(branchConv)/2))+branchConv + lo3Hold[(4 * (i[0])+(len(branchConv)-4)):]
+					
+			
 	        pass
 	    elif lo_contains:
 	        print("LOG: lo_contains")
 	        # FIXME
-	        """
-	        self.output_hi1.setText(" "*len(res))
-	        self.output_hi2.setText(" "*len(res))
-	        self.output_hi3.setText(" "*len(res))
-	        self.output_hi2.setText(self.output_hi2.text()[:(4 * (i[0] - 1))] + \
-	                "  / " + self.output_hi2.text()[(4 * (i[0])):])
-	        self.output_hi1.setText(self.output_hi1.text()[:(4 * (i[0] - 1))] + \
-	                " /  " + self.output_hi1.text()[(4 * (i[0])):])
-	        self.output_hi3.setText(self.output_hi1.text()[:(4 * (i[0] - 1))] + "  " +\
-	                (" "*ceil(len(branchConv)/2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
-	        """
+	        hi1Hold = " "*len(res)
+	        hi2Hold = " "*len(res)
+	        hi3Hold = " "*len(res)
+	        hi2Hold = hi2Hold[:(4 * (i[0] - 1))] + "  / " + hi2Hold[(4 * (i[0])):]
+	        hi1Hold = hi1Hold[:(4 * (i[0] - 1))] + " /  " + hi1Hold[(4 * (i[0])):]
+	        hi3Hold = hi3Hold[:(4 * (i[0] - 1))] + "  " + (" "*ceil(len(branchConv)/2))+branchConv + hi3Hold[(4 * (i[0])+(len(branchConv)-4)):]
+	        
 	    else:
 	        print("LOG: neither_contains")
 	        if(counterX%2==0):
 	            print("LOG: neither1")
 	            # FIXME
-	            """
-	            self.output_lo1.setText(" "*len(res))
-	            self.output_lo2.setText(" "*len(res))
-	            self.output_lo3.setText(" "*len(res))
-	            self.output_lo1.setText(self.output_lo1.text()[:(4 * (i[0] - 1))] + \
-	                    " \  " + self.output_lo1.text()[(4 * (i[0])):])
-	            self.output_lo2.setText(self.output_lo2.text()[:(4 * (i[0] - 1))] + \
-	                    "  \ " + self.output_lo2.text()[(4 * (i[0])):])
-	            self.output_lo3.setText(self.output_lo3.text()[:(4 * (i[0] - 1))] + \
-	                (" "*ceil(len(branchConv)/2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
-				"""
+	            lo1Hold = " "*len(res)
+	            lo2Hold = " "*len(res)
+	            lo3Hold = " "*len(res)
+	            lo1Hold = lo1Hold[:(4 * (i[0] - 1))] + " \  " + lo1Hold[(4 * (i[0])):]
+	            lo2Hold = lo2Hold[:(4 * (i[0] - 1))] + "  \ " + lo2Hold[(4 * (i[0])):]
+	            lo3Hold = lo3Hold[:(4 * (i[0] - 1))] + (" "*ceil(len(branchConv)/2))+branchConv + lo3Hold[(4 * (i[0])+(len(branchConv)-4)):]
+			            
 
 	            pass
 	        elif(counterX%2==1):
 	            print("LOG: neither2")
 	            # FIXME
-	            """
-	            self.output_hi1.setText(" "*len(res))
-	            self.output_hi2.setText(" "*len(res))
-	            self.output_hi3.setText(" "*len(res))
-	            self.output_hi2.setText(self.output_hi2.text()[:(4 * (i[0] - 1))] + \
-	                    "  / " + self.output_hi2.text()[(4 * (i[0])):])
-	            self.output_hi1.setText(self.output_hi1.text()[:(4 * (i[0] - 1))] + \
-	                    " /  " + self.output_hi1.text()[(4 * (i[0])):])
-	            self.output_hi3.setText(self.output_hi3.text()[:(4 * (i[0] - 1))] + "  " +\
-	                (" "*ceil(len(branchConv)/2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
+	            hi2Hold = hi2Hold[:(4 * (i[0] - 1))] + "  / " + hi2Hold[(4 * (i[0])):]
+	            hi1Hold = hi1Hold[:(4 * (i[0] - 1))] + " /  " + hi1Hold[(4 * (i[0])):]
+	            hi3Hold = hi3Hold[:(4 * (i[0] - 1))] + "  " + (" "*ceil(len(branchConv)/2))+branchConv + hi3Hold[(4 * (i[0])+(len(branchConv)-4)):]
 	            pass
-	            """
+	            
 
 	        pass
 	    counterX+=1
@@ -1294,8 +1278,10 @@ def chkBond(bondorder, noofc, bondpos_chkBond=[2], numbranch=[], branch=[], benz
 
 
 	"""
-
-	return res
+	if lo_contains or hi_contains:
+		return [res, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
+	else:
+		return [res, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
 
 
 

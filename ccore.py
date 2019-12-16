@@ -834,38 +834,40 @@ def cyclic(noofc=3):
 	        print("LOG: condition is true [001]")
 	        n = (noofc-2)//2
 	        holder = TERMINAL[1]+((n-1)*"-CH₂")  # random holder variable
-	        self.output_hi2_2.setText(holder) # text box 1
-	        self.output_hi1_2.setText("/"+" "*len(holder)+"\\") # text box 2
-	        self.output_lo1_2.setText("\\"+" "*len(holder)+"/") # text box 3
-	        self.output_lo2_2.setText(holder) # text box 4
+	        hi2Hold = holder # text box 1
+	        hi1Hold = "/"+" "*len(holder)+"\\" # text box 2
+	        lo1Hold = "\\"+" "*len(holder)+"/"
+	        lo2Hold = holder # text box 4
 	        res = TERMINAL[1] + " "*(len(holder)) + TERMINAL[1]
-	        return res
+	        return [res, lo1Hold, lo2Hold, " ", hi1Hold, hi2Hold, " "]
 
 	    else:
 	        msg = "ERROR: An unhandled error occured"
 	        print(msg)
-	        return msg
+	        return [msg]
 	else:
 
 	    print("LOG: Number of carbons are odd")
 	    if(noofc ==3):
 	        print("LOG: Detected cyclopropane")
 
-	        self.output_hi2.setText(TERMINAL[1])
-	        self.output_hi1.setText("/   \\")
+	        hi2Hold  = TERMINAL[1]
+	        hi1Hold = "/   \\"
 	        res =  TERMINAL[1]+"-"+TERMINAL[1]
-	        return res
+	        lo1Hold = " "
+	        lo2Hold = " "
+	        return [res, hi2Hold, hi1Hold, lo1Hold, lo2Hold]
 	    else:
 	        print("LOG: detected noofc ", noofc)
 	        print("LOG: condition is false, but odd [002]")
 	        n = (noofc-1)//2
 	        holder = TERMINAL[1]+((n-1)*"-CH₂")  # random holder variable
-	        self.output_hi2_2.setText(holder) # text box 1
-	        self.output_hi1_2.setText("/"+" "*(len(holder)-2)+"╷"+" ") # text box 2
-	        self.output_lo1_2.setText("\\"+" "*(len(holder)-2)+"╵"+" ") # text box 3
-	        self.output_lo2_2.setText(holder) # text box 4
+	        hi2Hold = holder # text box 1
+	        hi1Hold = "/"+" "*(len(holder)-2)+"╷"+" " # text box 2
+	        lo1Hold = "\\"+" "*(len(holder)-2)+"╵"+" " # text box 3
+	        lo2Hold = holder # text box 4
 	        res = " " + TERMINAL[1] + " "*(len(holder)-2) + "|" +"    "
-	        return res
+	        return [res, hi2Hold, hi1Hold, lo1Hold, lo2Hold]
 
 
 def chkBond(carbox_struct):
@@ -883,16 +885,16 @@ def chkBond(carbox_struct):
 	branchesList = ["CH₃ ", "CH₂-CH₃ ", "CH₂-CH₂-CH₃ ", "CH₂-CH₂-CH₂-CH₃ ", "CH₂-CH₂-CH₂-CH₂-CH₃ "]
 	counterX = 1
 	if(benzylBool):
-	    res = cyclic(6)
+	    res =  cyclic(6)[0]
 	    noofc = 6
 	    n = (noofc-2)//2
 	    holder = TERMINAL[1]+((n-1)*"-CH₂")  # random holder variable
 	    # FIXME :::::::: __>
-	    #self.output_hi2_2.setText(holder) # text box 1
-	    #self.output_hi1_2.setText("╔"+" "*len(holder)+"╗") # text box 2
-	    #self.output_lo1_2.setText("\\"+" "*len(holder)+"/") # text box 3
-	    #self.output_lo2_2.setText(holder.replace("-", "=")) # text box 4
-	    return res
+	    hi2Hold = holder
+	    hi1Hold = "╔"+" "*len(holder)+"╗" # text box 2
+	    lo1Hold = "\\"+" "*len(holder)+"/" # text box 3
+	    lo2Hold = holder.replace("-", "=") # text box 4
+	    return [res, lo1Hold, lo2Hold, " ", hi1Hold, hi2Hold, " "]
 
 	if (bondorder == 1):
 	    res = alkane(noofc)
@@ -986,7 +988,7 @@ def chkBond(carbox_struct):
 	            if h1occ and l1occ and h2occ and l2occ:
 	            	# FIXME 
 	                # print("LOG: needed area is '", self.output_lo2_2.text()[(halogenzip[0])*4:(halogenzip[0]+1)*4], "'")
-	                if(lo2Hold[(halogenzip[0])*4:(halogenzip[0]+1)*4].isspace():
+	                if(lo2Hold[(halogenzip[0])*4:(halogenzip[0]+1)*4].isspace()):
 	                    useLo = True
 	                elif(hi2Hold[(halogenzip[0])*4:(halogenzip[0]+1)*4]).isspace():
 	                    useHi = True
@@ -1157,131 +1159,109 @@ def chkBond(carbox_struct):
 	    	hi1Hold = " "*len(res)
 	    	hi2Hold = " "*len(res)
 	    	hi3Hold = " "*len(res)
-
-
-	    for j in lo1Hold:
-	        if(j.isspace()):
-	            continue
-	        else:
-	            lo_contains = True
-	    for k in hi1Hold:
-	        if(k.isspace()):
-	            continue
-	        else:
-	            hi_contains = True
+	    	
+	    if(lo1Hold.isspace()):
+	        lo_contains = False
+	    else:
+	        lo_contains = True
+	    if(hi1Hold.isspace()):
+	        hi_contains = False
+	    else:
+	        hi_contains = True
+            
 	    if (hi_contains and lo_contains):
 	        print("WARNING: Lets wait for it")
 	        if(counterX%2==0):
 	            print("LOG: neither1")
 	            # FIXME
 	            
-	            lo1Hold = lo1Hold[:(4 * (i[0] - 1))] + \
-	                    " \  " + lo1Hold[(4 * (i[0])):]
-	                    
-	            lo2Hold = lo2Hold[:(4 * (i[0] - 1))] + \
-	                    "  \ " + lo2Hold[(4 * (i[0])):]
-	            lo3Hold = lo3Hold[:(4 * (i[0] - 1))] + \
-	                (" "*ceil(len(branchConv)/2))+branchConv + lo3Hold[(4 * (i[0])+(len(branchConv)-4)):]
+	            lo1Hold = lo1Hold[:(4 * (i[0] - 1))] + " \  " + lo1Hold[(4 * (i[0])):]
+	            lo2Hold = lo2Hold[:(4 * (i[0] - 1))] + "  \ " + lo2Hold[(4 * (i[0])):]
+	            lo3Hold = lo3Hold[:(4 * (i[0] - 1))] + (" "*ceil(len(branchConv)/2))+branchConv + lo3Hold[(4 * (i[0])+(len(branchConv)-4)):]
 				
 
 	            pass
 	        elif(counterX%2==1):
+	        
 	            print("LOG: neither2")
 	            # FIXME
-	            """
-	            self.output_hi2.setText(self.output_hi2.text()[:(4 * (i[0] - 1))] + \
-	                    "  / " + self.output_hi2.text()[(4 * (i[0])):])
-	            self.output_hi1.setText(self.output_hi1.text()[:(4 * (i[0] - 1))] + \
-	                    " /  " + self.output_hi1.text()[(4 * (i[0])):])
-	            self.output_hi3.setText(self.output_hi3.text()[:(4 * (i[0] - 1))] + \
-	                (" "*ceil(len(branchConv)/2))+branchConv + self.output_hi1.text()[(4 * (i[0])+(len(branchConv)-4)):])
-	            """
+	            
+	            hi1Hold = hi1Hold[:(4 * (i[0] - 1))] + "  / " + hi1Hold[(4 * (i[0])):]
+	            hi2Hold = hi2Hold[:(4 * (i[0] - 1))] + " /  " + hi2Hold[(4 * (i[0])):]
+	            hi3Hold = hi3Hold[:(4 * (i[0] - 1))] + (" "*ceil(len(branchConv)/2))+branchConv + hi3Hold[(4 * (i[0])+(len(branchConv)-4)):]
+	            print("HHH", hi1Hold, hi2Hold, hi3Hold)
+	            hi_contains = True
 	            pass
 	    elif hi_contains:
 	        print("LOG: hi_contains")
 	        print("LOG: branchCOnv:", branchConv)
 	        print("LOG: i[0]", i[0])
 	        # FIXME
-	        lo1Hold = " "*len(res)
-	        lo2Hold = " "*len(res)
-	        lo3Hold = " "*len(res)
+	        try:
+	            trier = lo1Hold
+	        except NameError:
+	            lo1Hold = " "*len(res)
+	            lo2Hold = " "*len(res)
+	            lo3Hold = " "*len(res)
 	        lo1Hold = lo1Hold[:(4 * (i[0] - 1))] + " \  " + lo1Hold[(4 * (i[0])):]
-	        lo2Hold = lo2Hold[:(4 * (i[0] - 1))] +   "  \ " + lo2Hold[(4 * (i[0])):]
+	        lo2Hold = lo2Hold[:(4 * (i[0] - 1))] + "  \ " + lo2Hold[(4 * (i[0])):]
 	        lo3Hold = lo3Hold[:(4 * (i[0] - 1))] + (" "*ceil(len(branchConv)/2))+branchConv + lo3Hold[(4 * (i[0])+(len(branchConv)-4)):]
-					
+	        lo_contains = True		
 			
 	        pass
 	    elif lo_contains:
 	        print("LOG: lo_contains")
 	        # FIXME
-	        hi1Hold = " "*len(res)
-	        hi2Hold = " "*len(res)
-	        hi3Hold = " "*len(res)
-	        hi2Hold = hi2Hold[:(4 * (i[0] - 1))] + "  / " + hi2Hold[(4 * (i[0])):]
-	        hi1Hold = hi1Hold[:(4 * (i[0] - 1))] + " /  " + hi1Hold[(4 * (i[0])):]
+	        try:
+	            trier = hi1Hold
+	        except NameError:
+	            hi1Hold = " "*len(res)
+	            hi2Hold = " "*len(res)
+	            hi3Hold = " "*len(res)
+	        hi1Hold = hi1Hold[:(4 * (i[0] - 1))] + "  / " + hi1Hold[(4 * (i[0])):]
+	        hi2Hold = hi2Hold[:(4 * (i[0] - 1))] + " /  " + hi2Hold[(4 * (i[0])):]
 	        hi3Hold = hi3Hold[:(4 * (i[0] - 1))] + "  " + (" "*ceil(len(branchConv)/2))+branchConv + hi3Hold[(4 * (i[0])+(len(branchConv)-4)):]
+	        hi_contains = True
 	        
 	    else:
 	        print("LOG: neither_contains")
 	        if(counterX%2==0):
 	            print("LOG: neither1")
 	            # FIXME
-	            lo1Hold = " "*len(res)
-	            lo2Hold = " "*len(res)
-	            lo3Hold = " "*len(res)
+	            try:
+	                trier = lo1Hold
+	            except NameError:
+	                lo1Hold = " "*len(res)
+	                lo2Hold = " "*len(res)
+	                lo3Hold = " "*len(res)
 	            lo1Hold = lo1Hold[:(4 * (i[0] - 1))] + " \  " + lo1Hold[(4 * (i[0])):]
 	            lo2Hold = lo2Hold[:(4 * (i[0] - 1))] + "  \ " + lo2Hold[(4 * (i[0])):]
 	            lo3Hold = lo3Hold[:(4 * (i[0] - 1))] + (" "*ceil(len(branchConv)/2))+branchConv + lo3Hold[(4 * (i[0])+(len(branchConv)-4)):]
-			            
 
 	            pass
 	        elif(counterX%2==1):
 	            print("LOG: neither2")
 	            # FIXME
-	            hi2Hold = hi2Hold[:(4 * (i[0] - 1))] + "  / " + hi2Hold[(4 * (i[0])):]
-	            hi1Hold = hi1Hold[:(4 * (i[0] - 1))] + " /  " + hi1Hold[(4 * (i[0])):]
 	            hi3Hold = hi3Hold[:(4 * (i[0] - 1))] + "  " + (" "*ceil(len(branchConv)/2))+branchConv + hi3Hold[(4 * (i[0])+(len(branchConv)-4)):]
+	            hi2Hold = hi2Hold[:(4 * (i[0] - 1))] + "  / " + hi2Hold[(4 * (i[0])):]	            
+	            hi1Hold = hi1Hold[:(4 * (i[0] - 1))] + " /  " + hi1Hold[(4 * (i[0])):]
+
+
+	            print("HHH", hi1Hold, hi2Hold, hi3Hold)
 	            pass
-	            
-
 	        pass
+	        
 	    counterX+=1
-	    """
-	    if(i[0] == int(ceil((nooc00/2) ))):
-
-	        print("LOG : DIVIDER IS CENTERED ")
-	        self.output_lo1.setText("\\")
-	        self.output_lo2.setText(" "+ spac*(len(branchConv)) +branchConv)
-
-	    elif(i[0] > int(ceil((nooc00/2) ))):
-	        self.output_lo2.setText(spac + spac*(len(branchConv)) +spac*(8*(i[0]-int(ceil((nooc00/2)))))+branchConv)
-	        self.output_lo1.setText(spac*8*(i[0]-int(ceil((nooc00/2))))+"\\")
-	    elif(i[0] < int(ceil((nooc00/2) ))):
-	        self.output_lo2.setText(spac + spac*(len(branchConv)) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-i[0])))
-	        self.output_lo1.setText("\\" + spac*(8*(int(ceil((nooc00/2)))-i[0])))
-
-
-	elif(counterX%2==0):
-	    if(i[0] == int(ceil((nooc00/2) ))):
-
-	        print("LOG : DIVIDER IS CENTERED ")
-	        self.output_hi1.setText("/")
-	        self.output_hi2.setText(" "+ spac*(len(branchConv)) +branchConv)
-
-	    elif(i[0] > int(ceil((nooc00/2) ))):
-	        self.output_hi2.setText(spac + spac*(len(branchConv)) +spac*(8*(i[0]-int(ceil((nooc00/2)))))+branchConv)
-	        self.output_hi1.setText(spac*8*(i[0]-int(ceil((nooc00/2))))+"/")
-	    elif(i[0] < int(ceil((nooc00/2) ))):
-	        self.output_hi2.setText(spac + spac*(len(branchConv)) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-i[0])))
-	        self.output_hi1.setText("/" + spac*(8*(int(ceil((nooc00/2)))-i[0])))self.output_hi2.setText(spac + spac*(len(branchConv)) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-i[0])))
-	        self.output_hi1.setText("/" + spac*(8*(int(ceil((nooc00/2)))-i[0])))
-
-
-	"""
-	if lo_contains or hi_contains:
-		return [res, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
+	    continue
 	else:
-		return [res, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
+	    try:
+	        return [res, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
+	    except (NameError, AttributeError):
+	        return [res]
+	try:
+	    return [res, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
+	except (NameError, AttributeError):
+	    return [res]
 
 
 

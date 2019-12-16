@@ -379,22 +379,15 @@ def addfunctionalgrp(noofc):
                 answer = answer[:-5]+tempterminal
 
 
-        restxt = chkBond(carbox(bondorder, noofc, bondpos_chkBond, numbranch, branch, benzylBool, haloIndexConv, haloGroupConv))
+        #restxt = chkBond(carbox(bondorder, noofc, bondpos_chkBond, numbranch, branch, benzylBool, haloIndexConv, haloGroupConv))
 
-        leng = len(restxt); print(restext)
+        #leng = len(restxt); print(restext)
 
 def alkenebond(bondpos=1, answer_src = "" ):
     # Check the inputted value,
     # Check if bondpos value and answer_src is valid
 
-    if bondpos is None:
-        bondpos = placer.value()
-    else:
-        bondpos = bondpos
-    if answer_src is None:
-        answer = elf.output.text()
-    else:
-        answer = answer_src
+    answer = answer_src
     print(answer+"ANS")
     answer = answer[:(4 * (bondpos - 1))] + \
                                 BOND[2] + answer[(4 * (bondpos)):]
@@ -403,9 +396,9 @@ def alkenebond(bondpos=1, answer_src = "" ):
     print(answer)
     noofcc = answer.count("C")
 
-def alkynebond():
-    bondpos = placer.value()
-    answer = output.text()
+def alkynebond(x, bondpos):
+
+    answer = x
     print(answer+"ANS")
 
     # -------------------------------------

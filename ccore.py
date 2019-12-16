@@ -421,24 +421,10 @@ def alkynebond():
     print(answer)
     # -------------------------------------
     noofcc = answer.count("C")
-    # FIXME :: ->
-    #self.output.setText(answer)
-
-    #self.placer.setMinimum(int(bondpos)+2)
-    #self.placer.setValue(int(bondpos)+2)
-    #self.placertxt.setText(str(bondpos+2))
-    if(bondpos+2>noofcc - 2):
-        print("Disabling Slider")
-        #self.placer.setEnabled(False)
-        #self.pushButton_3.setEnabled(False)
-    else:
-        pass
-        #self.placer.setMaximum(noofcc - 2)
-
 
 
 def alkane(noofc):
-    #pushButton_3.setEnabled(False)
+
     if (noofc == 1):
 
         answer = "CH₄"
@@ -446,10 +432,7 @@ def alkane(noofc):
 
         answer = BOND[0] + BOND[1] * (noofc - 2) + TERMINAL[0]
     print(answer)
-    #self.output_hi1_2.setText(" "*len(answer))
-    #self.output_hi2_2.setText(" "*len(answer))
-    #self.output_lo1_2.setText(" "*len(answer))
-    #self.output_lo2_2.setText(" "*len(answer))
+    
     return answer
 
 def ketone(noofc, bondpos_chkBond):
@@ -482,10 +465,6 @@ def ketone(noofc, bondpos_chkBond):
             answer = answer.replace("=CH₁=", "= C =")
             print(answer)
 
-        #self.placer.setMinimum(2)
-        #self.placer.setMaximum(noofc - 2)
-        #self.placer.setEnabled(True)
-        #self.pushButton_3.setEnabled(True)
     return [answer]
 
 def aldehyde(noofc, bondpos_chkBond):
@@ -495,8 +474,6 @@ def aldehyde(noofc, bondpos_chkBond):
     else:
 
         ans = alkene(noofc-1, bondpos_chkBond, True)
-
-
 
     branchConv_aldehyde = "CHO"
     spac = " "
@@ -541,20 +518,6 @@ def aldehyde(noofc, bondpos_chkBond):
         else:
             print("ERROR: An unhandled error occured. #101")
 
-        """
-        if(int(i) == int(ceil((nooc00/2) ))):
-
-            print("LOG : DIVIDER IS CENTERED ")
-            self.output_lo1.setText(self.output_lo1.text()[(3+((intOfI-1)*4)):])
-            self.output_lo2.setText(" "+ spac*(len(branchConv)) +branchConv)
-
-        elif(int(i) > int(ceil((nooc00/2) ))):
-            self.output_lo2.setText()
-            self.output_lo1.setText(spac*8*(int(i)-int(ceil((nooc00/2))))+"|")
-        elif(int(i) < int(ceil((nooc00/2) ))):
-            self.output_lo2.setText(spac*(len(branchConv)-1) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-int(i))))
-            self.output_lo1.setText("|" + spac*(8*(int(ceil((nooc00/2)))-int(i))))
-        """
     return ans
 
 
@@ -607,20 +570,6 @@ def carboxylic(self, noofc, bondpos_chkBond):
         ans ="ERROR: An unhandled error occured. #101"
         print(ans)
 
-        """
-        if(int(i) == int(ceil((nooc00/2) ))):
-
-            print("LOG : DIVIDER IS CENTERED ")
-            self.output_lo1.setText(self.output_lo1.text()[(3+((intOfI-1)*4)):])
-            self.output_lo2.setText(" "+ spac*(len(branchConv)) +branchConv)
-
-        elif(int(i) > int(ceil((nooc00/2) ))):
-            self.output_lo2.setText()
-            self.output_lo1.setText(spac*8*(int(i)-int(ceil((nooc00/2))))+"|")
-        elif(int(i) < int(ceil((nooc00/2) ))):
-            self.output_lo2.setText(spac*(len(branchConv)-1) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-int(i))))
-            self.output_lo1.setText("|" + spac*(8*(int(ceil((nooc00/2)))-int(i))))
-        """
     return ans
 
 
@@ -652,10 +601,19 @@ def alcohol(self, noofc, bondpos_chkBond):
             ans = "CH3-CH2-OH "
         else:
             ans = ans[:-3]+"CH₂-OH "
-            self.output_lo2_2.setText(len(ans)*spac)
-            self.output_lo1_2.setText(len(ans)*spac)
-            self.output_hi2_2.setText(len(ans)*spac)
-            self.output_hi1_2.setText(len(ans)*spac)
+            try:
+                trier = lo1Hold
+            except NameError:
+                lo2Hold = len(ans)*spac
+                lo1Hold = len(ans)*spac
+                lo3Hold = len(ans)*spac
+                
+            try:
+                trier = hi1Hold
+            except NameError:
+                hi2Hold = len(ans)*spac
+                hi1Hold = len(ans)*spac
+                hi3Hold = len(ans)*spac
 
     elif((bondpos%2==0)and (1<bondpos<noofc)):
         print("LOG: using lo")
@@ -672,21 +630,6 @@ def alcohol(self, noofc, bondpos_chkBond):
     else:
         ans ="ERROR: An unhandled error occured. #101"
         print(ans)
-
-        """
-        if(int(i) == int(ceil((nooc00/2) ))):
-
-            print("LOG : DIVIDER IS CENTERED ")
-            self.output_lo1.setText(self.output_lo1.text()[(3+((intOfI-1)*4)):])
-            self.output_lo2.setText(" "+ spac*(len(branchConv)) +branchConv)
-
-        elif(int(i) > int(ceil((nooc00/2) ))):
-            self.output_lo2.setText()
-            self.output_lo1.setText(spac*8*(int(i)-int(ceil((nooc00/2))))+"|")
-        elif(int(i) < int(ceil((nooc00/2) ))):
-            self.output_lo2.setText(spac*(len(branchConv)-1) + branchConv+ spac*(8*(int(ceil((nooc00/2)))-int(i))))
-            self.output_lo1.setText("|" + spac*(8*(int(ceil((nooc00/2)))-int(i))))
-        """
     return ans
 
 

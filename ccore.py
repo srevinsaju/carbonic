@@ -478,10 +478,20 @@ def aldehyde(noofc, bondpos_chkBond):
     branchConv_aldehyde = "CHO"
     spac = " "
     rndcnt = 1
-    self.output_lo2_2.setText(len(ans)*spac)
-    self.output_lo1_2.setText(len(ans)*spac)
-    self.output_hi2_2.setText(len(ans)*spac)
-    self.output_hi1_2.setText(len(ans)*spac)
+    try:
+        trier = lo1Hold
+    except NameError:
+        lo2Hold = len(ans)*spac
+        lo1Hold = len(ans)*spac
+        lo3Hold = len(ans)*spac
+    
+    try:
+        trier = hi1Hold
+    except:
+        hi1Hold = len(ans)*spac
+        hi2Hold = len(ans)*spac
+        hi3Hold = len(ans)*spac
+
     for i in bondpos_chkBond:
         nooc00 = noofc-1
         bondpos = int(i)
@@ -490,38 +500,26 @@ def aldehyde(noofc, bondpos_chkBond):
         print(bondpos, '=', noofc)
         if(bondpos==1):
             ans = "CHO-CH₂-"+ans[4:]
-            self.output_lo2_2.setText(len(ans)*spac)
-            self.output_lo1_2.setText(len(ans)*spac)
-            self.output_hi2_2.setText(len(ans)*spac)
-            self.output_hi1_2.setText(len(ans)*spac)
             continue
         elif (bondpos==noofc-1):
             ans = ans[:-3]+"CH₂-CHO"
-            self.output_lo2_2.setText(len(ans)*spac)
-            self.output_lo1_2.setText(len(ans)*spac)
-            self.output_hi2_2.setText(len(ans)*spac)
-            self.output_hi1_2.setText(len(ans)*spac)
             continue
 
         if((bondpos%2==0)and (1<bondpos<noofc-1)):
             print("LOG: using lo")
-            self.output_lo2_2.setText(self.output_lo2_2.text()[:(4 * (bondpos - 1))] + \
-                            "CHO " + self.output_lo2_2.text()[(4 * (bondpos)):])
-            self.output_lo1_2.setText(self.output_lo1_2.text()[:(4 * (bondpos - 1))] + \
-                " ╵  " + self.output_lo1_2.text()[(4 * (bondpos)):])
+            lo2Hold = lo2Hold[:(4 * (bondpos - 1))] + "CHO " + lo2Hold[(4 * (bondpos)):]
+            lo1Hold = lo1Hold[:(4 * (bondpos - 1))] + " ╵  " + lo1Hold[(4 * (bondpos)):]
         elif((bondpos%2==1)and (1<bondpos<noofc-1)):
             print("LOG: using hi")
-            self.output_hi2_2.setText(self.output_hi2_2.text()[:(4 * (bondpos - 1))] + \
-                        "CHO " + self.output_hi2_2.text()[(4 * (bondpos)):])
-            self.output_hi1_2.setText(self.output_hi1_2.text()[:(4 * (bondpos - 1))] + \
-                " ╷  " + self.output_hi1_2.text()[(4 * (bondpos)):])
+            hi2Hold = hi2Hold[:(4 * (bondpos - 1))] + "CHO " + hi2Hold[(4 * (bondpos)):]
+            hi1Hold = hi1Hold[:(4 * (bondpos - 1))] + " ╷  " + hi1Hold[(4 * (bondpos)):]
         else:
             print("ERROR: An unhandled error occured. #101")
 
-    return ans
+    return [ans, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
 
 
-def carboxylic(self, noofc, bondpos_chkBond):
+def carboxylic(noofc, bondpos_chkBond):
     if not bondpos_chkBond:
         bondpos_chkBond = [1]
         ans = alkane(noofc)
@@ -531,10 +529,21 @@ def carboxylic(self, noofc, bondpos_chkBond):
 
     spac = " "
     rndcnt = 1
-    self.output_lo2_2.setText(len(ans)*spac)
-    self.output_lo1_2.setText(len(ans)*spac)
-    self.output_hi2_2.setText(len(ans)*spac)
-    self.output_hi1_2.setText(len(ans)*spac)
+    try:
+        trier = lo1Hold
+    except NameError:
+        lo2Hold = len(ans)*spac
+        lo1Hold = len(ans)*spac
+        lo3Hold = len(ans)*spac
+
+    try:
+        trier = hi1Hold
+    except:
+        hi1Hold = len(ans)*spac
+        hi2Hold = len(ans)*spac
+        hi3Hold = len(ans)*spac
+            
+
     print("WARNING: for Caarboxylic, only one -COOH functional group is added per structure")
     nooc00 = noofc
     bondpos = int(bondpos_chkBond[0])
@@ -549,31 +558,24 @@ def carboxylic(self, noofc, bondpos_chkBond):
             ans = "CH3-CH2-COOH"
         else:
             ans = ans[:-3]+"CH₂-COOH"
-            self.output_lo2_2.setText(len(ans)*spac)
-            self.output_lo1_2.setText(len(ans)*spac)
-            self.output_hi2_2.setText(len(ans)*spac)
-            self.output_hi1_2.setText(len(ans)*spac)
+
 
     elif((bondpos%2==0)and (1<bondpos<noofc)):
         print("LOG: using lo")
-        self.output_lo2_2.setText(self.output_lo2_2.text()[:(4 * (bondpos - 1))] + \
-                        "COOH" + self.output_lo2_2.text()[(4 * (bondpos)):])
-        self.output_lo1_2.setText(self.output_lo1_2.text()[:(4 * (bondpos - 1))] + \
-            " ╵  " + self.output_lo1_2.text()[(4 * (bondpos)):])
+        lo2Hold = lo2Hold[:(4 * (bondpos - 1))] + "COOH" + lo2Hold[(4 * (bondpos)):]
+        lo1Hold = lo1Hold[:(4 * (bondpos - 1))] + " ╵  " + lo1Hold[(4 * (bondpos)):]
     elif((bondpos%2==1)and (1<bondpos<noofc)):
         print("LOG: using hi")
-        self.output_hi2_2.setText(self.output_hi2_2.text()[:(4 * (bondpos - 1))] + \
-                    "COOH" + self.output_hi2_2.text()[(4 * (bondpos)):])
-        self.output_hi1_2.setText(self.output_hi1_2.text()[:(4 * (bondpos - 1))] + \
-            " ╷  " + self.output_hi1_2.text()[(4 * (bondpos)):])
+        hi2Hold = hi2Hold[:(4 * (bondpos - 1))] + "COOH" + hi2Hold[(4 * (bondpos)):]
+        hi1Hold = hi1Hold[:(4 * (bondpos - 1))] + " ╷  " + hi1Hold[(4 * (bondpos)):]
     else:
         ans ="ERROR: An unhandled error occured. #101"
         print(ans)
 
-    return ans
+    return [ans, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
 
 
-def alcohol(self, noofc, bondpos_chkBond):
+def alcohol(noofc, bondpos_chkBond):
     if not bondpos_chkBond:
         bondpos_chkBond = [1]
         ans = alkane(noofc)
@@ -583,10 +585,19 @@ def alcohol(self, noofc, bondpos_chkBond):
 
     spac = " "
     rndcnt = 1
-    self.output_lo2_2.setText(len(ans)*spac)
-    self.output_lo1_2.setText(len(ans)*spac)
-    self.output_hi2_2.setText(len(ans)*spac)
-    self.output_hi1_2.setText(len(ans)*spac)
+    try:
+        trier = lo1Hold
+    except NameError:
+        lo2Hold = len(ans)*spac
+        lo1Hold = len(ans)*spac
+        lo3Hold = len(ans)*spac
+        
+    try:
+        trier = hi1Hold
+    except NameError:
+        hi2Hold = len(ans)*spac
+        hi1Hold = len(ans)*spac
+        hi3Hold = len(ans)*spac
     print("WARNING: for Alcohol, only one -OH functional group is added per structure")
     nooc00 = noofc
     bondpos = int(bondpos_chkBond[0])
@@ -617,20 +628,16 @@ def alcohol(self, noofc, bondpos_chkBond):
 
     elif((bondpos%2==0)and (1<bondpos<noofc)):
         print("LOG: using lo")
-        self.output_lo2_2.setText(self.output_lo2_2.text()[:(4 * (bondpos - 1))] + \
-                        " OH " + self.output_lo2_2.text()[(4 * (bondpos)):])
-        self.output_lo1_2.setText(self.output_lo1_2.text()[:(4 * (bondpos - 1))] + \
-            " ╵  " + self.output_lo1_2.text()[(4 * (bondpos)):])
+        lo2Hold = lo2Hold[:(4 * (bondpos - 1))] + " OH " + lo2Hold[(4 * (bondpos)):]
+        lo1Hold = lo1Hold[:(4 * (bondpos - 1))] + " ╵  " + lo1Hold[(4 * (bondpos)):]
     elif((bondpos%2==1)and (1<bondpos<noofc)):
         print("LOG: using hi")
-        self.output_hi2_2.setText(self.output_hi2_2.text()[:(4 * (bondpos - 1))] + \
-                    " OH " + self.output_hi2_2.text()[(4 * (bondpos)):])
-        self.output_hi1_2.setText(self.output_hi1_2.text()[:(4 * (bondpos - 1))] + \
-            " ╷  " + self.output_hi1_2.text()[(4 * (bondpos)):])
+        hi2Hold = hi2Hold[:(4 * (bondpos - 1))] + " OH " + hi2Hold[(4 * (bondpos)):]
+        hi1Hold = hi1Hold[:(4 * (bondpos - 1))] + " ╷  " + hi1Hold[(4 * (bondpos)):]
     else:
         ans ="ERROR: An unhandled error occured. #101"
         print(ans)
-    return ans
+    return [ans, lo1Hold, lo2Hold, lo3Hold, hi1Hold, hi2Hold, hi3Hold]
 
 
 def alkene(noofc=1, bondpos_chkBond=[2], normallity=False):
@@ -683,43 +690,6 @@ def alkene(noofc=1, bondpos_chkBond=[2], normallity=False):
             answer = answer.replace("=", "-")
 
             print("LOG: Non-alkanised alkene answer", answer)
-
-        self.placer.setMinimum(2)
-        self.placer.setMaximum(noofc - 2)
-        self.placer.setEnabled(True)
-        self.pushButton_3.setEnabled(True)
-        """
-        while (k == 1):
-
-            bondpos = int(input(
-                "Enter the postion of the bond (from least to greatest or left to right) --> "))
-
-            if (bondpos == 0):
-                k = 0
-            elif (bondpos == 1):
-                print("Double bondorder on terminal carbon atoms are invalid")
-                k = 0
-
-            elif (bondpos == noofc):
-                print("Double bondorder on terminal carbon atoms are invalid")
-                k = 0
-            elif (bondpos == noofc - 1):
-                print("Double bondorder on terminal carbon atoms are invalid")
-                k = 0
-            else:
-
-                if (counter3 > bondpos):
-                    print("Enter in ascending order")
-                    k = 0
-                else:
-                    answer = answer[:(4 * (bondpos - 1))] + \
-                        BOND[2] + answer[(4 * (bondpos)):]
-
-                    answer = answer.replace("=CH₂-", "=CH₁-")
-                    answer = answer.replace("=CH₁=", "= C =")
-                    print(answer)
-                    counter3 = bondpos
-      """
 
     print("OUTPUT 0 : ", answer)
     return answer
@@ -854,14 +824,18 @@ def chkBond(carbox_struct):
         return res
     elif bondorder == 6:
         res = aldehyde(noofc, bondpos_chkBond)
+        return res
     elif bondorder == 7:
         res = carboxylic(noofc, bondpos_chkBond)
+        return res
     elif bondorder == 8:
         print("LOG: Alcohol ++++++++++++++")
         res = alcohol(noofc, bondpos_chkBond)
+        return res
 
     else:
-        res = "Bye Bye!"
+        res = ["Your functional group might not be supporte by " + \
+        "carbonic core. Create an issue requesting feature, PRs, Bye Bye!"]
         print(res)
 
 

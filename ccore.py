@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
 carbonic on github by @srevinsaju
+(c) 2019 by Srevin Saju (srevinsaju.github.io)
+CARBONIC CORE AI
+CONVERTS IUPAC NAMES TO CARBON STRUCTURES
+SRC ON https://github.com/srevinsaju/carbonic
 
 ALL CODE IS LICENSED UNDER GNU-GPL LICENSE. READ LICENSE FOR MORE INFORMATION
 
@@ -35,6 +39,17 @@ import sys
 import time
 import collections
 
+print("""
+
+carbonic on github by @srevinsaju
+(c) 2019 by Srevin Saju (srevinsaju.github.io)
+CARBONIC CORE AI
+CONVERTS IUPAC NAMES TO CARBON STRUCTURES
+SRC ON https://github.com/srevinsaju/carbonic
+
+ALL CODE IS LICENSED UNDER GNU-GPL LICENSE. READ LICENSE FOR MORE INFORMATION
+
+""")
 class carbox:
     def __init__(self, bondorder=1, noofc=1, bondpos_chkBond=[2], numbranch=[], branch=[], benzylBool=False, haloIndexConv=[], haloGroupConv=[], **kwargs):
         self.bondOrder=bondorder

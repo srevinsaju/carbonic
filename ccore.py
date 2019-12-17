@@ -530,10 +530,13 @@ def aldehyde(noofc, bondpos_chkBond):
 def carboxylic(noofc, bondpos_chkBond):
     if not bondpos_chkBond:
         bondpos_chkBond = [1]
-        ans = alkane(noofc)
+        ans = alkane(noofc-1)
     else:
-
-        ans = alkene(noofc, bondpos_chkBond, True)
+        # return carbox(bond_int, noofc0, bondpos_chkBond, addOnBranchesNum, addOnBranches, benzeneChildBool, haloIndexConv, haloGroupConv)
+        ans = chkBond(carbox(2, noofc-1, bondpos_chkBond))
+        #ans = alkene(noofc-1, bondpos_chkBond, True)
+        ans = ans[0].replace('=CH₁', '-CH₂')
+    print("LOG: Carboxylix and init : ", ans, "bondpos" , bondpos_chkBond)
 
     spac = " "
     rndcnt = 1
@@ -565,7 +568,7 @@ def carboxylic(noofc, bondpos_chkBond):
         elif(noofc==2):
             ans = "CH3-COOH"
         else:
-            ans = ans[:-3]+"COOH"
+            ans = ans[:-3]+"CH₂-COOH"
 
 
     elif((bondpos%2==0)and (1<bondpos<noofc)):

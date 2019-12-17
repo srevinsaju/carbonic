@@ -53,8 +53,6 @@ NNNNRESULT = ""
 # noofc = int(input("Enter number of carbon atoms ---> "))
 # bonds = int(input("Enter  1: single bond 2: double bond 3: triple bond  ---> "))
 
-
-
 class MyAppv(Ui_Dialog):
     def __init__(self, Dialog):
         super(MyAppv, self).__init__()
@@ -75,13 +73,13 @@ class MyAppv(Ui_Dialog):
         self.placertxt.setText(str(self.placer.value()))
         self.pushButton_3.setEnabled(False)
         self.pushButton_3.pressed.connect(self.bondchk)
-        self.pushButton_4.pressed.connect(self.transalate)
+        self.pushButton_4.pressed.connect(self.compute)
 
     def openme(self):
         webbrowser.open("https://srevinsaju.wixsite.com/srevinsaju")
     def opengit(self):
         webbrowser.open("https://srevinsaju.github.io/carbonic/")
-    def transalate(self):
+    def compute(self):
         # clear all text boxes to prevent confilict
         self.output.setText("")
         self.output_lo2.setText("")

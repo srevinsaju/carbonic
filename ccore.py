@@ -563,9 +563,9 @@ def carboxylic(noofc, bondpos_chkBond):
             ans = "H-COOH"
             pass
         elif(noofc==2):
-            ans = "CH3-CH2-COOH"
+            ans = "CH3-COOH"
         else:
-            ans = ans[:-3]+"CH₂-COOH"
+            ans = ans[:-3]+"-COOH"
 
 
     elif((bondpos%2==0)and (1<bondpos<noofc)):
